@@ -2,6 +2,15 @@
 Simulation of **Excitonic transport** dynamics in a **excitonic dimer** using a stochastic unraveling approach based on **Collisional Methods**, both in **Quantum Jump** and **Difussive Limits**.
 The results are validated through a comparison with the dynamics derived from the **Lindblad Master Equation**. Furthermore, the collisional evolution is benchmarked against the **Isolated System** dynamics (i.e., purely unitary evolution without the collisional interaction).
 
+Author : Francesco Ciavarella - francesco.ciavarella@studenti.unipd.it
+
+---
+## Contents : 
+
+1. [Initial Configuration](Initial Configuration)
+2. [Repository Organization](Repository Organization)
+3. [Future Goals](Future Goals)
+
 ---
 
 ## Initial Configuration
@@ -21,3 +30,16 @@ To replicate the results clone the repository and recreate the Conda enviroment,
     conda avtivate mc
     ```
 Now you are ready to navigate the repository and run the notebooks.
+
+---
+
+## Repository Organization
+
+
+---
+
+## Future Goals
+
+
+---
+

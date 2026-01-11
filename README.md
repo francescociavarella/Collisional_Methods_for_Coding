@@ -7,9 +7,9 @@ Author : Francesco Ciavarella - francesco.ciavarella@studenti.unipd.it
 ---
 ## Contents : 
 
-1. [Initial Configuration](Initial Configuration)
-2. [Repository Organization](Repository Organization)
-3. [Future Goals](Future Goals)
+1. [Initial Configuration](#1-Initial-Configuration)
+2. [Repository Organization](#2-Repository-Organization)
+3. [Future Goals](#3-Future-Goals)
 
 ---
 

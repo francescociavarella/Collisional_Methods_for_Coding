@@ -9,7 +9,7 @@ To replicate the results clone the repository and recreate the Conda enviroment,
 
 1. **Clone the Repository**
     ```
-    git clone [https://github.com/francescociavarella/Collisional_Methods_for_Coding.git](https://github.com/francescociavarella/Collisional_Methods_for_Coding.git)
+    git clone https://github.com/francescociavarella/Collisional_Methods_for_Coding.git
    cd Collisional_Methods_for_Coding
     ```
 2. **Create the Enviroment wit Conda**

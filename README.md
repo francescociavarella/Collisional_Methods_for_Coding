@@ -7,16 +7,16 @@ The results are validated through a comparison with the dynamics derived from th
 ## Initial Configuration
 To replicate the results clone the repository and recreate the Conda enviroment, to ensure all required libraries are installed.
 
-1. ** Clone the Repository **
+1. **Clone the Repository**
     ```
     git clone [https://github.com/francescociavarella/Collisional_Methods_for_Coding.git](https://github.com/francescociavarella/Collisional_Methods_for_Coding.git)
    cd Collisional_Methods_for_Coding
     ```
-2. ** Create the Enviroment wit Conda **
+2. **Create the Enviroment wit Conda**
     ```
     conda env create -f enviroment.yml
     ```
-3. ** Activate Enviroment **
+3. **Activate Enviroment**
     ```
     conda avtivate mc
     ```

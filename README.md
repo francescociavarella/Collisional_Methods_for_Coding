@@ -1,2 +1,2 @@
 # Collisional_Methods_for_Coding
-Study of the dynamics of excitonic transport in  a excitonic dimer with an unraveling based on Collisional Methods
+Simulation of excitonic transport dynamics in a quantum dimer using a stochastic unraveling approach based on Collisional Methods, both in Quantum Jump and Difussive Limits.

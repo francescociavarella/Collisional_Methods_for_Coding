@@ -37,7 +37,7 @@ Now you are ready to navigate the repository and run the notebooks.
 
 This repository is organized in three main sections:
 
-* **Codes** : contains the `main_dynamics` program for implementation of the system evolution;it also includes two notebook for visualization of the results: `plot.ipynb` for standard plotting and `Bloch_Sphere.ipynb` for Bloch's Sphere animation .
+* **Codes** : contains the `Main_Dynamics` program for implementation of the system evolution;it also includes two notebook for visualization of the results: `Plot.ipynb` for standard plotting and `Bloch_Sphere.ipynb` for Bloch's Sphere animation .
 
 * **Results** : contains some example of simulation results. 
 

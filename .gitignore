@@ -6,9 +6,9 @@
 Results/
 
 # Tex Files
-.toc
-.aux
-.log
-.out
-.synctex.gz
+*.toc
+*.aux
+*.log
+*.out
+*.synctex.gz
 

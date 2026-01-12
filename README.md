@@ -37,11 +37,16 @@ Now you are ready to navigate the repository and run the notebooks.
 
 This repository is organized in three main sections:
 
-* **Codes** : contains the `Main_Dynamics` program for implementation of the system evolution;it also includes two notebook for visualization of the results: `Plot.ipynb` for standard plotting and `Bloch_Sphere.ipynb` for Bloch's Sphere animation .
+* **Codes** : contains the source code for the project.
+  * `Main_Dynamics`: implements the core system evolution
+  * `Plot.ipynb`: for visualizing results via standard 2D plotting
+  * `Bloch_Sphere.ipynb`: for 3D visualizations of the state's dynamics on the Bloch's Sphere.
 
 * **Results** : contains some example of simulation results. 
 
-* **Documentation** : contains `Report.pdf` which provides a brief introduction to *Collisional Methods* and the physical basis of the main program. Additionally `Demonstration.pdf` describes the mathematical derivation of some of the most important equations used. 
+* **Documentation** : provides the theretical background.
+  * `Report.pdf`: a brief introduction to *Collisional Methods* and the physical basis of the main program.
+  * `Demonstration.pdf`: mathematical derivation of some of the most important equations used.
 
 ---
 

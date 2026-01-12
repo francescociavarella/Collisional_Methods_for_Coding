@@ -41,7 +41,7 @@ This repository is organized in three main sections:
 
 * **Results** : contains some example of simulation results. 
 
-* **Documentation** : contains `Report.pdf` which provides a brief introduction to *Collisional Methods* and the physical basis of the main program. Additionally `Demonstration.pdf` describes the mathematical derivation of some of the most important equation used. 
+* **Documentation** : contains `Report.pdf` which provides a brief introduction to *Collisional Methods* and the physical basis of the main program. Additionally `Demonstration.pdf` describes the mathematical derivation of some of the most important equations used. 
 
 ---
 

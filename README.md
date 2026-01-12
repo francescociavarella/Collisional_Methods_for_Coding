@@ -35,11 +35,21 @@ Now you are ready to navigate the repository and run the notebooks.
 
 ## Repository Organization
 
+This repository is organized in three main sections:
+
+* **Codes** : contains the `main_dynamics` program for implementation of the system evolution;it also includes two notebook for visualization of the results: `plot.ipynb` for standard plotting and `Bloch_Sphere.ipynb` for Bloch's Sphere animation .
+
+* **Results** : contains some example of simulation results. 
+
+* **Documentation** : contains `Report.pdf` which provides a brief introduction to *Collisional Methods* and the physical basis of the main program. Additionally `Demonstration.pdf` describes the mathematical derivation of some of the most important equation used. 
 
 ---
 
 ## Future Goals
 
+Currently the focus is on the investigation and validation of an hypothetical **Intermediate Limit**, between the two regimes already analized (i.e. Quantum Jump and Diffusive); the goal is characterized the resulting unraveling and its physical dependencies.
+
+Future work will be the investigation of a **more complex dynamics and system topology**, for example using more than two site or introducing other different Enviroment effects (beyond the pure Dephasing currently studied)
 
 ---
 

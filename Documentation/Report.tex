@@ -1,0 +1,121 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{braket}
+\usepackage{tikz}
+\usepackage{cancel}
+\usepackage[top=3cm, bottom=3cm, left=2cm, right=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usetikzlibrary{arrows.meta, angles, quotes}
+
+\allowdisplaybreaks
+
+\titleformat{\section}
+{\normalfont\normalsize\bfseries}
+{\thesection}{1em}{}
+\titleformat{\subsection}
+{\normalfont\small\bfseries}
+{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+{\normalfont\small\bfseries}
+{\thesubsubsection}{1em}{}
+
+\title{
+	\vspace{2cm}
+	\Huge \textbf{Collisional Methods} \\[0.5cm]
+	\large Analysis of the Unraveling of Quantum Master Equations in the Quantum Jump and Diffusional Limits
+	\vspace{5cm}
+}
+
+\author{\Large Francesco Ciavarella - University of Padua \\[10pt] \href{mailto:francesco.ciavarella@studenti.unipd.it}{francesco.ciavarella@studenti.unipd.it}}
+
+\begin{document}
+	
+	\maketitle
+	\thispagestyle{empty} 
+	\newpage
+	
+	\tableofcontents
+	\newpage
+	
+	\section{Introduction}
+	
+	\subsection{Open Quantum System an Quantum Master Equation}
+	First, it is essential to frame the scope of this project within the field of \textit{Environment-Assisted Quantum Transport (ENAQT)}. This framework focuses on evaluating the effects of the surrounding environment on open quantum systems. The latter are usually constituted of a set of qubits representing different chromophores' energy states.
+	Such systems are typically described using the \textit{density matrix} formalism, where we define $ \rho_S = \sum_{k}^{N}{\ket{\Psi_{k}^{S}}\bra{\Psi_{k}^{S}}} $.\\
+	This approach is fundamental as it allows for the treatment of quantum systems subject to classical statistical uncertainty (i.e. mixed states), combining quantum coherent superposition with classical probabilities.\\
+	\\
+	Specifically, ENAQT explores how environment-induced phenomena can enhance the efficiency of excitonic transport across different sites (i.e., the transfer of excitation). In this context, one of the simplest environmental effects is the induction of \textit{Decoherence}: a mechanism that facilitates the transfer of excitation toward the final target site by destroying the coherence between different sites and localizing the excitation in a single one.\\
+	\\
+	In the study of open quantum systems, various equations can describe the dynamics of these sites, defined as the evolution of the system's density matrix over time.	
+	\\
+	To account for environmental effects, it would formally be necessary to study the evolution of the \textit{total system}, i.e. comprising both the sites and the environment's degrees of freedom, and subsequently perform a \textit{partial trace} over the latter. However, since the dimensionality of this total Hilbert space is often computationally unmanageable, the standard approach involves the use of \textit{Dynamical Maps}. These maps allow us to obtain the evolution of the system alone while still accounting for the effect of the external environment, such as \textit{Dephasing} or \textit{Relaxation}.\\
+	\\
+	Among the most well-known \textit{Dynamical Maps} there are the \textit{Redfield equation}, which is microscopically derived, and the \textit{Lindblad equation}. The latter is based on the theory of quantum semigroups and is derived with a more mathematical approach to ensure the evolution remains \textit{Completely Positive and Trace Preserving} (CPTP) at all times. In this work, we will specifically focus on the Lindblad master equation, which reads : 
+	
+	\begin{equation}
+		\dot{\rho_{S}} = -i [H, \rho_{S}] + \sum_k \gamma_k \left( L_k \rho_{S} L_k^\dagger - \frac{1}{2} \left[ L_k^\dagger L_k, \rho_{S} \right]_{+} \right)
+		\label{eq:lindblad}
+	\end{equation}
+	\\
+	where $ \gamma_k $ are the \textit{Lindblad rates}, that may be different for every sites; while $ \L_k $ are the \textit{Jump operator}, which describe the environment effect on the system.\\
+	
+	\newpage
+	
+	In this specific study, we will focus exclusively on the phenomenon of \textit{pure Dephasing}. This process is responsible for the suppression of quantum coherences between different sites, favoring excitonic transport. 
+	For our model, this mechanism is described by the jump operators 
+	\begin{equation}
+		L_k = \sigma_z^{(k)}
+		\label{eq:jump_operator_z}
+	\end{equation}
+	where $\sigma_z$ is the Pauli matrices acting on the $k$-th site (represented by a qubit). This choice of operator ensures that while the off-diagonal elements of the density matrix (the coherences) decay over time, the diagonal elements (the populations) remain unaffected.
+	
+	\subsection{Stochastic Unraveling of Quantum Master Equation}
+	
+	The concept of \textit{unraveling} refers to the decomposition of the deterministic Master Equation into a statistical ensemble of single stochastic trajectories. Instead of directly evolving the density matrix $ \rho_{S} $, which describes the average state of the ensemble, one evolves a single wave function $ \ket{\psi(t)} $ subject to random events, which represents the direct effect of the environment on the quantum state. The full dynamics of the density matrix is then reconstructed by averaging over a large number of these realizations:
+	\begin{equation}
+		\rho_{S}(t) \approx \frac{1}{M} \sum_{j=1}^M \ket{\psi_{j}^{S}(t)}\bra{\psi_{j}^{S}(t)}
+	\end{equation}
+	where $M$ is the number of simulated trajectories.\\
+	\\
+	This approach offers different advantages such as the reduction of the computational cost, since with if $N$ is the dimension of the Hilbert space, the density matrix $\rho$ involves $N^2$ elements and it's evolution scales as $O(N^2)$, instead of the wave function, that contains only $N$ components and scales as $O(N)$. \\
+	Another advantage is that the Master Equation describes only the average effect of the environment on the System Density Matrix, while in the stochastic unraveling, analyzing a single realization, it's possible to understand how effectively the environment affects the system, distinguishing between the fundamental quantum uncertainty and the statistical mixture resulting from decoherence.\\
+	
+	In this sense it's possible to define two opposite limits, describing the  environment effect on the system, which are the so called :
+	
+	\begin{itemize}
+		\item \textbf{Diffusive Limit:} The environment induces small changes in the system's state but acts continuously in time, behaving as a source of random noise. This regime is physically associated with a \textit{weak measurement} performed on the system.
+		
+		\item \textbf{Quantum Jump Limit:} The environment induces a strong, discontinuous modification of the system's wave function, but the probability of this event occurring is very low in a single time step. In contrast to the diffusive case, this limit corresponds to a \textit{strong measurement} performed on the system.
+	\end{itemize}
+	
+	\newpage
+	
+	\subsection{Collisional Method}
+	
+	\subsection{The Collisional Method}
+	
+	While there are several established algorithms for unraveling the Quantum Master Equation—such as the \textit{Stochastic Schr\"odinger Equation} (SSE) or the \textit{Monte Carlo Wave Function} (MCWF) method, this work focuses on the \textbf{Collisional Model} framework.
+	
+	The primary objective is to implement and explore this approach, which reconstructs the continuous dynamics through a sequence of discrete interactions, called \textit{Collisions}, occurring over a finite time step $\Delta t$.
+	In this model, the environment is not treated as a continuum but is represented by a set of auxiliary units called \textbf{Ancillas}, typically modeled as qubits (two-level systems).
+	
+	The dynamics proceeds as follows:
+	\begin{enumerate}
+		\item \textbf{Initialization:} At the beginning of each step, the System and the current Ancilla are in a \textit{product state}, $\rho_{tot} = \rho_S \otimes \rho_A$.
+		\item \textbf{Collision:} They undergo a joint unitary evolution governed by a specific \textbf{Collisional Hamiltonian}, which generally creates entanglement between the System and the Ancilla.
+		\item \textbf{Measurement:} Finally, a measurement is performed on the Ancilla. Due to the quantum correlations established during the collision, the outcome of this measurement induces a conditional change on the System's state.
+	\end{enumerate}
+	
+	Since the probability of measuring one of the two Ancilla's states is finite, it is possible to implement a \textit{Stochastic Algorithm} which randomly chooses the change to apply to the System, according to the Ancilla's measurement outcome. In this way, it is possible to obtain a single \textit{Random Trajectory}.
+
+	
+		
+	
+\end{document}

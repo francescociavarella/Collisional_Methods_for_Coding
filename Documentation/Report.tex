@@ -194,16 +194,28 @@
 	Concatenating the evolution given by Eq.\eqref{eq:psi_evol_Diff0} and Eq.\eqref{eq:psi_evol_Diff1} or Eq.\eqref{eq:psi_evol_QJ}, it's possible to create a Stochastic Algorithm that creates a Trajectory in the two limits; averaging then different trajectories realizations it's possible to recover the Lindblad evolution.
 	
 	\begin{description}
-		\item[Quantum Jump Algorithm]
-			\begin{enumerate}
-				\item Isolated System's evolution with $ \mathcal{U}_{Exc} $
-				\item Extraction for every different site of a Random Number $\alpha$ in [0,1]
-				\item If $ \alpha < \sin^{2}{\left(c_j \Delta t\right)} $ it means that there's been an effective collision that has flipped the initial Ancilla's state $ \ket{0_a} $ to $ \ket{1_a} $ and so the System's wf get modified by $ \sigma_{z}^{j} $ on every \textit{j-th} site; \\
+		\item[Quantum Jump Algorithm] \leavevmode
+			\begin{enumerate} 
+				\item Isolated System's evolution with $ \mathcal{U}_{Exc} = \exp{\left( -i \, \mathcal{H}_{Exc} \Delta t \right) }$
+				\item Extraction for every different site of a Random Number $\alpha$ in $[0,1]$
+				\item If $ \alpha < \sin^{2}{\left(c_j \Delta t\right)} $ it means that there's been an effective collision that has flipped the initial Ancilla's state $ \ket{0_a} $ to $ \ket{1_a} $ and so the System's wf gets modified by $ \sigma_{z}^{j} $ on every \textit{j-th} site; \\
 				if $ \alpha > \sin^{2}{\left(c_j \Delta t\right)} $ the system remain unchanged (i.e. application of $ \mathbb{I}^j $ )
-				\item Measure and store System's Observables at that time step (like population)
-				\item Repeat for the next time step the algorithm
+				\item Once all the sites have been processed , measure and store System's Observables at that time step (like population)
+				\item Repeat the algorithm for the next time step
 			\end{enumerate}
-	\end{description}
+		\item[Diffusive Algorithm] \leavevmode
+			\begin{enumerate} 
+				\item Isolated System's evolution with $ \mathcal{U}_{Exc} = \exp{\left( -i \, \mathcal{H}_{Exc} \Delta t \right) }$
+				\item Extraction for every different site of a Random Number 	$\alpha$ in $[0,1]$
+				\item If $ \alpha < 0.5 $ it means that state $ \ket{0_a} $ has been measured and so the System's wf gets modified via EQ.\eqref{eq:psi_evol_Diff0} for every \textit{j-th} site;
+				otherwise state $ \ket{1_a} $ has been measured and the System's wf gets modified via EQ.\eqref{eq:psi_evol_Diff1}.
+				\item Once all the sites have been processed , measure and store System's Observables at that time step (like population)
+				\item Repeat the algorithm for the next time step
+			\end{enumerate}
+		\end{description}
+		
+		Since the update operators in both limits are unitary, the wave function norm is theoretically preserved at each step. However, to prevent numerical errors from accumulating over long simulations, it is standard practice to enforce renormalization after every time step.
+	
 	
 	
 	

@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{hyperref}
+\usepackage{parskip}
 \usepackage{braket}
 \usepackage{tikz}
 \usepackage{cancel}
@@ -20,10 +21,10 @@
 {\normalfont\normalsize\bfseries}
 {\thesection}{1em}{}
 \titleformat{\subsection}
-{\normalfont\small\bfseries}
+{\normalfont\normalsize\bfseries}
 {\thesubsection}{1em}{}
 \titleformat{\subsubsection}
-{\normalfont\small\bfseries}
+{\normalfont\normalsize\bfseries}
 {\thesubsubsection}{1em}{}
 
 \title{
@@ -49,21 +50,21 @@
 	\subsection{Open Quantum System an Quantum Master Equation}
 	First, it is essential to frame the scope of this project within the field of \textit{Environment-Assisted Quantum Transport (ENAQT)}. This framework focuses on evaluating the effects of the surrounding environment on open quantum systems. The latter are usually constituted of a set of qubits representing different chromophores' energy states.
 	Such systems are typically described using the \textit{density matrix} formalism, where we define $ \rho_S = \sum_{k}^{N}{\ket{\Psi_{k}^{S}}\bra{\Psi_{k}^{S}}} $.\\
-	This approach is fundamental as it allows for the treatment of quantum systems subject to classical statistical uncertainty (i.e. mixed states), combining quantum coherent superposition with classical probabilities.\\
-	\\
-	Specifically, ENAQT explores how environment-induced phenomena can enhance the efficiency of excitonic transport across different sites (i.e., the transfer of excitation). In this context, one of the simplest environmental effects is the induction of \textit{Decoherence}: a mechanism that facilitates the transfer of excitation toward the final target site by destroying the coherence between different sites and localizing the excitation in a single one.\\
-	\\
+	This approach is fundamental as it allows for the treatment of quantum systems subject to classical statistical uncertainty (i.e. mixed states), combining quantum coherent superposition with classical probabilities.
+
+	Specifically, ENAQT explores how environment-induced phenomena can enhance the efficiency of excitonic transport across different sites (i.e., the transfer of excitation). In this context, one of the simplest environmental effects is the induction of \textit{Decoherence}: a mechanism that facilitates the transfer of excitation toward the final target site by destroying the coherence between different sites and localizing the excitation in a single one.
+
 	In the study of open quantum systems, various equations can describe the dynamics of these sites, defined as the evolution of the system's density matrix over time.	
-	\\
-	To account for environmental effects, it would formally be necessary to study the evolution of the \textit{total system}, i.e. comprising both the sites and the environment's degrees of freedom, and subsequently perform a \textit{partial trace} over the latter. However, since the dimensionality of this total Hilbert space is often computationally unmanageable, the standard approach involves the use of \textit{Dynamical Maps}. These maps allow us to obtain the evolution of the system alone while still accounting for the effect of the external environment, such as \textit{Dephasing} or \textit{Relaxation}.\\
-	\\
+
+	To account for environmental effects, it would formally be necessary to study the evolution of the \textit{total system}, i.e. comprising both the sites and the environment's degrees of freedom, and subsequently perform a \textit{partial trace} over the latter. However, since the dimensionality of this total Hilbert space is often computationally unmanageable, the standard approach involves the use of \textit{Dynamical Maps}. These maps allow us to obtain the evolution of the system alone while still accounting for the effect of the external environment, such as \textit{Dephasing} or \textit{Relaxation}.
+
 	Among the most well-known \textit{Dynamical Maps} there are the \textit{Redfield equation}, which is microscopically derived, and the \textit{Lindblad equation}. The latter is based on the theory of quantum semigroups and is derived with a more mathematical approach to ensure the evolution remains \textit{Completely Positive and Trace Preserving} (CPTP) at all times. In this work, we will specifically focus on the Lindblad master equation, which reads : 
 	
 	\begin{equation}
 		\dot{\rho_{S}} = -i [H, \rho_{S}] + \sum_k \gamma_k \left( L_k \rho_{S} L_k^\dagger - \frac{1}{2} \left[ L_k^\dagger L_k, \rho_{S} \right]_{+} \right)
 		\label{eq:lindblad}
 	\end{equation}
-	\\
+
 	where $ \gamma_k $ are the \textit{Lindblad rates}, that may be different for every sites; while $ \L_k $ are the \textit{Jump operator}, which describe the environment effect on the system.\\
 	
 	\newpage
@@ -81,11 +82,12 @@
 	The concept of \textit{unraveling} refers to the decomposition of the deterministic Master Equation into a statistical ensemble of single stochastic trajectories. Instead of directly evolving the density matrix $ \rho_{S} $, which describes the average state of the ensemble, one evolves a single wave function $ \ket{\psi(t)} $ subject to random events, which represents the direct effect of the environment on the quantum state. The full dynamics of the density matrix is then reconstructed by averaging over a large number of these realizations:
 	\begin{equation}
 		\rho_{S}(t) \approx \frac{1}{M} \sum_{j=1}^M \ket{\psi_{j}^{S}(t)}\bra{\psi_{j}^{S}(t)}
+		\label{eq:mean_over_traj}
 	\end{equation}
-	where $M$ is the number of simulated trajectories.\\
-	\\
+	where $M$ is the number of simulated trajectories.
+
 	This approach offers different advantages such as the reduction of the computational cost, since with if $N$ is the dimension of the Hilbert space, the density matrix $\rho$ involves $N^2$ elements and it's evolution scales as $O(N^2)$, instead of the wave function, that contains only $N$ components and scales as $O(N)$. \\
-	Another advantage is that the Master Equation describes only the average effect of the environment on the System Density Matrix, while in the stochastic unraveling, analyzing a single realization, it's possible to understand how effectively the environment affects the system, distinguishing between the fundamental quantum uncertainty and the statistical mixture resulting from decoherence.\\
+	Another advantage is that the Master Equation describes only the average effect of the environment on the System Density Matrix, while in the stochastic unraveling, analyzing a single realization, it's possible to understand how effectively the environment affects the system, distinguishing between the fundamental quantum uncertainty and the statistical mixture resulting from decoherence.
 	
 	In this sense it's possible to define two opposite limits, describing the  environment effect on the system, which are the so called :
 	
@@ -98,23 +100,114 @@
 	\newpage
 	
 	\subsection{Collisional Method}
-	
-	\subsection{The Collisional Method}
-	
-	While there are several established algorithms for unraveling the Quantum Master Equation—such as the \textit{Stochastic Schr\"odinger Equation} (SSE) or the \textit{Monte Carlo Wave Function} (MCWF) method, this work focuses on the \textbf{Collisional Model} framework.
+		
+	While there are several established algorithms for unraveling the Quantum Master Equation—such as the \textit{Stochastic Schr\"odinger Equation} (SSE) or the \textit{Monte Carlo Wave Function} (MCWF) method, this work focuses on the \textit{Collisional Model} framework.
 	
 	The primary objective is to implement and explore this approach, which reconstructs the continuous dynamics through a sequence of discrete interactions, called \textit{Collisions}, occurring over a finite time step $\Delta t$.
-	In this model, the environment is not treated as a continuum but is represented by a set of auxiliary units called \textbf{Ancillas}, typically modeled as qubits (two-level systems).
+	In this model, the environment is not treated as a continuum but is represented by a set of auxiliary units called \textit{Ancillas}, typically modeled as qubits (two-level systems).
 	
 	The dynamics proceeds as follows:
 	\begin{enumerate}
 		\item \textbf{Initialization:} At the beginning of each step, the System and the current Ancilla are in a \textit{product state}, $\rho_{tot} = \rho_S \otimes \rho_A$.
-		\item \textbf{Collision:} They undergo a joint unitary evolution governed by a specific \textbf{Collisional Hamiltonian}, which generally creates entanglement between the System and the Ancilla.
-		\item \textbf{Measurement:} Finally, a measurement is performed on the Ancilla. Due to the quantum correlations established during the collision, the outcome of this measurement induces a conditional change on the System's state.
+		\item \textbf{Collision:} They undergo a joint unitary evolution governed by a specific \textit{Collisional Hamiltonian}, which generally creates entanglement between the System and the Ancilla.
+		\item \textbf{Measurement:} A measurement is performed on the Ancilla. Due to the quantum correlations established during the collision, the outcome of this measurement induces a conditional change on the System's state.
+		\item \textbf{Reset:} After the measurement, the current ancilla is discarded. For the next time step, the system interacts with a new, identical ancilla initialized in the same initial state, and the cycle repeats. This ensures the Markovian nature of the dynamics. 
 	\end{enumerate}
 	
 	Since the probability of measuring one of the two Ancilla's states is finite, it is possible to implement a \textit{Stochastic Algorithm} which randomly chooses the change to apply to the System, according to the Ancilla's measurement outcome. In this way, it is possible to obtain a single \textit{Random Trajectory}.
 
+	But first of all, focus on the Collisional Methods Hamiltonian form, which in general is divided in two term :
+	\begin{equation}
+		\mathcal{H}_{CM} = \mathcal{H}_{Exc} + \mathcal{H}_{Collision}
+		\label{eq:CM_hamiltonian}
+	\end{equation}
+	where 
+	\begin{equation}
+		\mathcal{H}_{Exc} = \mathcal{H}_{Site} + V_{Hopping} = \sum_{j=1}^{N} {\frac{\varepsilon_j}{2} \sigma_{z}^{j} \otimes \mathbb{I}^{\otimes N} } + \sum_{\langle j,j' \rangle} {\frac{V_{j,j'}}{2} \left( \sigma_{x}^{j}\sigma_{x}^{j'} \otimes \mathbb{I}^{\otimes N} + \sigma_{y}^{j}\sigma_{y}^{j'} \otimes \mathbb{I}^{\otimes N} \right)}
+		\label{eq:Exc_Hamiltonian} 
+	\end{equation}  represents the \textit{Isolated System Hamiltonian},representing the internal dynamics of the $N$ sites.The Hopping term specifically is what allows the effective Exciton transfer, since the Collisonal term just facilitates the transport by canceling the coherence created. The summation on \textit{j} runs over the different System's sites.
+	
+	The form of $ \mathcal{H}_{Collision} $ specifically defines the unraveling regime. In order to recover the correct QME form, it's fundamental to correctly initialize the Ancilla's state, which is deeply related to the specific form of \textit{Interaction Hamiltonian}, $ \mathcal{H}_{Collision} $. \\	
+	In this context it's possible to associate the two opposite regime, seen before, with two different configurations of the Collisional Method ( i.e. form of the Collisional Hamiltonian and Ancilla's state initialization ): 
+	
+	\begin{description}
+		\item[Diffusive Limit]
+		\begin{equation}
+			\mathcal{H}_{Coll} = \sum_{j=1}^{N}{c_j \sigma_{z}^{j} \otimes \sigma_{z}^{a_j}} \text{\quad and \quad} \rho_{a} = \frac{1}{2} \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}
+			\label{eq:diff_initialization}
+		\end{equation}
+		The Ancilla is in the complete mixed state, i.e. given a reservoir of Ancillas, there's the 0.5 probability of finding it in the $ \ket{0_a} $ state and so the same for $ \ket{1_a} $ state; in this case  the $ \mathcal{H}_{Coll} $ acts on the Ancilla as a $ \sigma_{z}^{a_j} $, introducing a phase shift on the sate.
+		\item[Quantum Jump Limit] 
+			\begin{equation}
+				\mathcal{H}_{Coll} = \sum_{j=1}^{N}{c_j \sigma_{z}^{j} \otimes \sigma_{x}^{a_j}} \text{\quad and \quad} \rho_{a} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}
+				\label{eq:QJ_initialization}
+			\end{equation}
+			The Ancilla is always initialized in the $ \ket{0_a} $ state and the $ \mathcal{H}_{Coll} $ acts on it as a $ \sigma_{x}^{a_j} $ flipping its state.
+	\end{description}
+
+	Once we've defined the $ \mathcal{H}_{Collision} $, it's important to see how it affect the System's evolution. In general the wave function at a time step $ t + \Delta t $ is given by the resolution of the Schr\"odinger Equation, which is :
+	\begin{equation}
+		\ket{\Psi_S (t + \Delta t)} = \mathcal{U} \ket{\Psi_S (t)} = e^{\left(-i \, \mathcal{H}_{CM} \Delta t\right)}\ket{\Psi_S (t)} = e^{\left(-i \, \mathcal{H}_{Exc} \Delta t\right)} e^{\left(-i \, \mathcal{H}_{Coll} \Delta t\right)}\ket{\Psi_S (t)} 
+		\label{eq:wf_evolution}
+	\end{equation}
+	where the last equivalence is valid thanks to a \textit{Trotter-Suzuki} decomposition and allows to separate the evolution in two step:
+	\begin{enumerate}
+		\item Isolated evolution via $ \mathcal{H}_{Exc} $
+		\item Collisional evolution via $ \mathcal{H}_{Coll} $
+	\end{enumerate}
+	Focusing on the collisional evolution we can analytically define the Evolution Operator \textit{U} form and how it modifies the System wf, in the two different limits. Note that in this derivation we will refer to only one site of the System's Hilbert space:
+	\begin{description}
+		\item[Diffusive Limit] 
+		\begin{equation}
+			U_{collsion} = \exp \left(-i c_j \sigma_{z}^{j} \otimes \sigma_{z}^{a_j} \Delta t\right) = \cos \left(c_j \Delta t \right) \mathbb{I}^j \otimes \mathbb{I}^a - i \sin \left(c_j \Delta t \right) \sigma_{z}^{j} \otimes \sigma_{z}^{a_j}
+			\label{eq:U_coll_Diff}
+		\end{equation}
+		In this case, since we have to deal with a completely mixed Ancilla's Density Matrix we divide the evolution in two different results based on the Ancilla's state, including in this sense the Classical uncertainty, which is $0.5$ for both the states:
+		\begin{align}
+			\ket{\Psi_0 (t + \Delta t) } = \Big[ \cos \left(c_j \Delta t \right) - i \sin \left(c_j \Delta t \right) \sigma_{z}^{j} \Big] \ket{\Psi_S(t)} \otimes \ket{0_a}
+			\label{eq:psi_evol_Diff0} \\
+			\ket{\Psi_1 (t + \Delta t) } = \Big[ \cos \left(c_j \Delta t \right) + i \sin \left(c_j \Delta t \right) \sigma_{z}^{j} \Big] \ket{\Psi_S(t)} \otimes \ket{1_a} 
+			\label{eq:psi_evol_Diff1}
+		\end{align}
+		Depending on the ancilla's state, the system undergoes a rotation in the opposite direction in the Hilbert space; specifically, if the ancilla is in $ \ket{0_a} $ the phase shift is $ + c_j \Delta t \sigma_{z}^{j} $, whereas with $ \ket{1_a} $ the phase shift is $ - c_j \Delta t \sigma_{z}^{j} $. This stochastic alternation between opposite phase shifts results in a quantum random walk of the system's phase. In the limit $ \Delta t \rightarrow 0 $, this discrete process converges to a continuous Brownian motion (Wiener process). Since $ \Delta t \rightarrow 0 $ the effect on the system will be very small.
+		\item[Quantum Jump Limit] 
+			\begin{equation}
+				U_{collsion} = \exp \left(-i c_j \sigma_{z}^{j} \otimes \sigma_{x}^{a_j} \Delta t\right) = \cos \left(c_j \Delta t \right) \mathbb{I}^j \otimes \mathbb{I}^a - i \sin \left(c_j \Delta t \right) \sigma_{z}^{j} \otimes \sigma_{x}^{a_j}
+				\label{eq:U_coll_QJ}
+			\end{equation}
+			\begin{equation}
+				\ket{\Psi (t + \Delta t) } = \cos \left(c_j \Delta t \right) \ket{\Psi_S (t)} \otimes \ket{0_a} - i \sin \left(c_j \Delta t \right) \sigma_{z}^{j} \ket{\Psi_S(t)} \otimes \ket{1_a}
+				\label{eq:psi_evol_QJ}
+			\end{equation}
+			In this case we have a modification on the System wf only when we measure $ \ket{1_a} $, but the variation isn't premultiplied by a small factor so the change will be significant. On the other hand the probability of measuring $ \ket{1_a} $ is given by
+			\begin{equation}
+				P_{1_a} = Tr_S \Big[\braket{1_a | \Psi(t + \Delta t)}\braket{\Psi(t + \Delta t) | 1_a}\Big] = \sin^{2}{\left(c_j \Delta t\right)}
+				\label{eq:ancilla_probability}
+			\end{equation} 
+			So in this case we have a significant variation but that happens very rarely.
+			
+		
+	\end{description}  
+	For more information about the equation derivation please see the Demonstration.pdf, in particular section 1.1 and 2.1. Moreover all the form of $ \ket{\Psi (t + \Delta t) } $ can be lead back to a Lindblad evolution, as specified in section 1.3 and 2.3
+	
+	\subsection{Theoretical Algorithm}
+	Concatenating the evolution given by Eq.\eqref{eq:psi_evol_Diff0} and Eq.\eqref{eq:psi_evol_Diff1} or Eq.\eqref{eq:psi_evol_QJ}, it's possible to create a Stochastic Algorithm that creates a Trajectory in the two limits; averaging then different trajectories realizations it's possible to recover the Lindblad evolution.
+	
+	\begin{description}
+		\item[Quantum Jump Algorithm]
+			\begin{enumerate}
+				\item Isolated System's evolution with $ \mathcal{U}_{Exc} $
+				\item Extraction for every different site of a Random Number $\alpha$ in [0,1]
+				\item If $ \alpha < \sin^{2}{\left(c_j \Delta t\right)} $ it means that there's been an effective collision that has flipped the initial Ancilla's state $ \ket{0_a} $ to $ \ket{1_a} $ and so the System's wf get modified by $ \sigma_{z}^{j} $ on every \textit{j-th} site; \\
+				if $ \alpha > \sin^{2}{\left(c_j \Delta t\right)} $ the system remain unchanged (i.e. application of $ \mathbb{I}^j $ )
+				\item Measure and store System's Observables at that time step (like population)
+				\item Repeat for the next time step the algorithm
+			\end{enumerate}
+	\end{description}
+	
+	
+	
+	\section{Computational Implementation}
 	
 		
 	

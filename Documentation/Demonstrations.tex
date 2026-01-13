@@ -43,15 +43,14 @@
 	
 	\tableofcontents
 	\newpage
-		
-	\section{Collisional Methods}
 	
-	\subsection{Quantum Jump limit in Collisional Methods}
+	\section{Quantum Jump limit in Collisional Methods}
+	\subsection{Evolution Operator and Ancilla Initialization}
 	The goal is to reproduce the Lindbald dynamic using a Collsional Model, that gives us a trajectory of evolution of a single state of the density matrix $ \ket{\Psi_k} $ rappresentig a qubit. By repeting the dynamic several times it's possibile to recrate the Lindblad evolution of the density matrix.
 	Different unravelling of the $ \rho (t) $ can be achieved by using different Collsional Hamiltonian. First we will reproduce the so called "Quantum Jump" or "Monte Carlo" limit, in which essentially the ancilla states stochastically jumps between the states $ \ket{0_a} $ and $ \ket{1_a} $ with a small probability to move to $ \ket{1} $ related to an effective collision, wich corresponds to an application of a $ \sigma_{z} $ to the system's state. \\
 	The associated Hamiltonian acting on the System-Ancilla states is:
 	\begin{align}
-		&\mathcal{H}_{CM} = \mathcal{H}_{exc} \otimes \mathbb{I}^{\otimes N} + \mathcal{H}_{collision} \\
+		&\mathcal{H}_{CM} = \mathcal{H}_{exc} + \mathcal{H}_{collision} \\
 		&= \sum_{j=1}^{N} {\frac{\varepsilon_j}{2} \sigma_{z}^{j} \otimes \mathbb{I}^{\otimes N} } + \sum_{\langle j,j' \rangle} {\frac{V_{j,j'}}{2} \left( \sigma_{x}^{j}\sigma_{x}^{j'} \otimes \mathbb{I}^{\otimes N} + \sigma_{y}^{j}\sigma_{y}^{j'} \otimes \mathbb{I}^{\otimes N} \right)} + \sum_{j=1}^{N}{c_j \sigma_{z}^{j} \otimes \sigma_{x}^{a_j}}
 	\end{align}
 	where $ \sigma_{\alpha}^j = \mathbb{I}^{\otimes j-1} \otimes \sigma_{\alpha} \otimes \mathbb{I}^{\otimes N-j}  $ . \\
@@ -72,7 +71,7 @@
 	\clearpage
 	\newpage
 	
-	\subsubsection{Reconstruction of the Density Matrix}
+	\subsection{Reconstruction of the Density Matrix}
 	Now we can rebuild the Density Matrix as :
 	\begin{align}
 		\rho' &= \ket{\Psi'}\bra{\Psi'} = \cos^{2} \left(c_j \Delta t \right) \rho_S' \otimes \ket{0_a}\bra{0_a} + \sin^{2} \left(c_j \Delta t \right) \sigma_{z}^{j} \rho_S \sigma_{z}^{j} \otimes \ket{1_a}\bra{1_a} \notag \\
@@ -88,7 +87,7 @@
 		&= \cos^{2}{\left(c_{j} \Delta t\right)} \rho_S + \sin^{2}{\left(c_{j} \Delta t\right)} \, \sigma_{z} \rho_S \sigma_{z} 
 	\end{align}	
 	
-	\subsubsection{Recovery of Lindblad form}
+	\subsection{Recovery of Lindblad form}
 	Before working on Eq.10 we have to point out that so far we have only analyzed the effect of the Collisional Hamiltonian, forgetting about the unitary evolution via the site Hamiltonian, which has the form : 
 	
 	\begin{equation}
@@ -102,7 +101,7 @@
 		\frac{\rho_S \left(t + \Delta t\right) - \rho_S (t)}{\Delta t} = - i \left[\mathcal{H}_{exc}, \rho_S \right]
 	\end{align} 
 	
-	Let's focus now on Eq.27 and its form for $ \lim \Delta t \rightarrow 0  $; using Taylor's expansion for the $ sin $ and $ cos $ we obtain that:
+	Let's focus now on Eq.9 and its form for $ \lim \Delta t \rightarrow 0  $; using Taylor's expansion for the $ sin $ and $ cos $ we obtain that:
 	
 	\begin{itemize}
 		\item $ \cos^{2}{\left(c_{j} \Delta t \right)} \approx 1 - c_{j}^{2} \Delta t ^{2} $
@@ -138,7 +137,7 @@
 	
 	Eq.20 corresponds to the Lindblad ME setting $ \mathcal{L}_k = \sigma_{z} $ in fact $ \sigma_{z} = \sigma_{z}^{\dagger} $ and $ \sigma_{z} \sigma_{z}^{\dagger} = \mathbb{I} $	
 	
-	\subsubsection{Algorithm for Trajectories}
+	\subsection{Algorithm for Trajectories}
 	
 	By measuring the Ancilla's state we can deduce if we had an avoided collision $ \ket{0_a} $ or an occurred collision $ \ket{1_a} $, which imples the application to the system of $ \sigma_{z}^{j} \ket{\Psi_S} $ which introduce a flip in the phase of the interacting site, with a probability of $ \left| {\sin \left(c_j \Delta t \right)} \right|^2  $, which contributes to the site dephasing process, helping the excitonic tranport (ENAQT - Enviroment Assisted Quantum Transport). \\
 	Measuring repeted time $ s $ the Ancilla states correspond on tracing its states out, so that we could rebuild the density matrix as :
@@ -165,9 +164,9 @@
 	\clearpage
 	\newpage
 	
-	\subsection{Diffusive Limit in Collisional Methods}
+	\section{Diffusive Limit in Collisional Methods}
 	
-	\subsubsection{Evolution Operator and Ancilla Initialization}
+	\subsection{Evolution Operator and Ancilla Initialization}
 	
 	In this framework, we define the interaction Hamiltonian and the initial state of the ancilla as follows:
 	\begin{align} 
@@ -246,7 +245,7 @@
 		&= \left[\cos{\left(c_j \Delta t\right)} + i\sin{\left(c_j \Delta t \right)} \sigma_{z}^{j} \right] \ket{\psi_{S}} \otimes \ket{1_a}
 	\end{align}
 	
-	\subsubsection{Density Matrix Reconstruction}
+	\subsection{Density Matrix Reconstruction}
 	
 	We can now define the effective operators acting on the system space. Let us define the operator $\mathcal{K}_0$ acting on $\ket{\psi_S}$ when the ancilla is $\ket{0}$:
 	\begin{equation}
@@ -305,14 +304,14 @@
 		It can be demonstrated that this equation can lead to a Dynamical Map in the Lindblad Master Equation form.  
 	\end{flushleft}
 	
-	\subsubsection{Recovery of Lindblad form}
+	\subsection{Recovery of Lindblad form}
 	
 	Since Eq.35 is the same obtained for the Quantum Jump limit, the procedure to recover the Lindblad form is the same of section 2.1.2
 	
-	\subsubsection{Algorithm for Trajectories}
+	\subsection{Algorithm for Trajectories}
 	
 	As already seen in Section 2.1.3 to produce an evolution with the Collisional Hamiltonian we can evolve the density matrix in tensor product with the Ancilla's density matrix with the complete Hamiltonian, i.e. Excitonic and Collisional term, and then trace out the Ancilla; this evolution has to reproduce exactly the Lindblad dynamic and corresponds to an average over an infinite number of trajectories. \\
-	The latter ones are the second method to evolve our system via single wave function dynamics; a trajectories, as seen so far, are stochastic evolution of the system wf, derived from the physical effect of measuring the Ancilla's state after every collision. An algorithm to reproduce this effect can be obtained with a sort of Monte Carlo method in which we extract a random number and if a certain condition is met we apply a particular evolution effect to the wave function. In the Quantum Jump limit the condition was the probability associated to the measurement of the Ancilla's state $ \ket{1_a} $, which derives from the normalization of the system obtained after applying the $ \sigma_z $ operator to the system. In the Diffusive limit we cannot base the condition on the norm of the evolved state, but we have to define a priori the its value, in order to reproduce the effect described by the Ancilla's density matrix. Since the latter is a completely mixed density matrix, i.e. both $ \ket{0_a} $ and $ \ket{1_a} $ state of the Ancilla have probability 1/2 to exist (it's like having a finite number of Ancillas where half of them are in the forund state and the other are in the excited state). So in this case the algorithm will be:
+	The latter ones are the second method to evolve our system via single wave function dynamics; a trajectories, as seen so far, are stochastic evolution of the system wf, derived from the physical effect of measuring the Ancilla's state after every collision. An algorithm to reproduce this effect can be obtained with a sort of Monte Carlo method in which we extract a random number and if a certain condition is met we apply a particular evolution effect to the wave function. In the Quantum Jump limit the condition was the probability associated to the measurement of the Ancilla's state $ \ket{1_a} $, explicitly derived. In the Diffusive limit we cannot base the condition on the norm of the evolved state, but we have to define a priori the its value, in order to reproduce the effect described by the Ancilla's density matrix. Since the latter is a completely mixed density matrix, i.e. both $ \ket{0_a} $ and $ \ket{1_a} $ state of the Ancilla have probability 1/2 to exist (it's like having a finite number of Ancillas where half of them are in the forund state and the other are in the excited state). So in this case the algorithm will be:
 	
 	\begin{itemize}
 		\item [1.] Apply the unitary evolution associate to $ \mathcal{H}_{site} $ and the hopping \\ potential V for a discrete time step $ \Delta t $ 

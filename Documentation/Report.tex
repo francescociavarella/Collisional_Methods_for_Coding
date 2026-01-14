@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,11pt]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -65,10 +65,8 @@
 		\label{eq:lindblad}
 	\end{equation}
 
-	where $ \gamma_k $ are the \textit{Lindblad rates}, that may be different for every sites; while $ \L_k $ are the \textit{Jump operator}, which describe the environment effect on the system.\\
-	
-	\newpage
-	
+	where $ \gamma_k $ are the \textit{Lindblad rates}, that may be different for every sites; while $ \L_k $ are the \textit{Jump operator}, which describe the environment effect on the system.
+		
 	In this specific study, we will focus exclusively on the phenomenon of \textit{pure Dephasing}. This process is responsible for the suppression of quantum coherences between different sites, favoring excitonic transport. 
 	For our model, this mechanism is described by the jump operators 
 	\begin{equation}
@@ -97,10 +95,7 @@
 		\item \textbf{Quantum Jump Limit:} The environment induces a strong, discontinuous modification of the system's wave function, but the probability of this event occurring is very low in a single time step. In contrast to the diffusive case, this limit corresponds to a \textit{strong measurement} performed on the system.
 	\end{itemize}
 	
-	\newpage
-	
 	\subsection{Collisional Method}
-		
 	While there are several established algorithms for unraveling the Quantum Master Equation—such as the \textit{Stochastic Schr\"odinger Equation} (SSE) or the \textit{Monte Carlo Wave Function} (MCWF) method, this work focuses on the \textit{Collisional Model} framework.
 	
 	The primary objective is to implement and explore this approach, which reconstructs the continuous dynamics through a sequence of discrete interactions, called \textit{Collisions}, occurring over a finite time step $\Delta t$.
@@ -185,10 +180,8 @@
 				\label{eq:ancilla_probability}
 			\end{equation} 
 			So in this case we have a significant variation but that happens very rarely.
-			
-		
 	\end{description}  
-	For more information about the equation derivation please see the Demonstration.pdf, in particular section 1.1 and 2.1. Moreover all the form of $ \ket{\Psi (t + \Delta t) } $ can be lead back to a Lindblad evolution, as specified in section 1.3 and 2.3
+	For more information about the equation derivation please see the \href{run:./Demonstration.pdf}{Demonstration file}, in particular section 1.1 and 2.1. Moreover all the form of $ \ket{\Psi (t + \Delta t) } $ can be lead back to a Lindblad evolution, as specified in section 1.3 and 2.3
 	
 	\subsection{Theoretical Algorithm}
 	Concatenating the evolution given by Eq.\eqref{eq:psi_evol_Diff0} and Eq.\eqref{eq:psi_evol_Diff1} or Eq.\eqref{eq:psi_evol_QJ}, it's possible to create a Stochastic Algorithm that creates a Trajectory in the two limits; averaging then different trajectories realizations it's possible to recover the Lindblad evolution.
@@ -215,8 +208,33 @@
 		\end{description}
 		
 		Since the update operators in both limits are unitary, the wave function norm is theoretically preserved at each step. However, to prevent numerical errors from accumulating over long simulations, it is standard practice to enforce renormalization after every time step.
+		
+	\subsection{Complete Evolution and Ancilla Trace}
+	While the stochastic unraveling focuses on individual trajectories of the wf, the \textit{Collisional Mode}l can also be formulated deterministically for the complete Density Matrix $ \rho_S \otimes \rho_A $. \\
+	The evolution of the system's Density Matrix $\rho_S$ over a time step is obtained by evolving the total state and then performing a \textit{partial trace} over the Ancilla's degrees of freedom. This operation mathematically corresponds to averaging over all possible measurement outcomes of the ancilla. \\
+	In this way we are creating a so called \textit{Dynamical Map} $ \Phi $, which reads:
 	
+	\begin{equation}
+		\rho_S(t + \delta t) = \Phi[\rho_S(t)] = \text{Tr}_A \left[ \mathcal{U} \left( \rho_S(t) \otimes \rho_A \right) \mathcal{U} ^\dagger \right]
+		\label{eq:dynamical_map}
+	\end{equation}
+	Since $\mathcal{U}$ is unitary, this map is guaranteed to be Completely Positive and Trace Preserving (CPTP).\\
+	It can be shown that in the continuous limit, i.e $ \Delta t \rightarrow 0 $ the discrete map defined in Eq.\eqref{eq:dynamical_map} converges to the differential Lindblad Master Equation (see section 1.3 in \href{run:./Demonstration.pdf}{Demonstration file}). \\
+	Thus, the Collisional Model serves as a rigorous microscopic derivation of the Lindblad dynamics.
+	 	
+	\section{Case Study : Exciton Dimer}
+	Since this work is a preliminary study of \textit{Collisional Methods}, the system consider is one of the simplest relevant to quantum transport: the \textit{Exciton Dimer}. This system consists of two sites, where each site is modeled as a two-level system (qubit). The computational basis for the composite Hilbert space is given by: 
+	\begin{equation}
+		\left\{\ket{00}, \ket{01}, \ket{10}, \ket{11} \right\}
+	\end{equation}
+	where the notation $\ket{s_1 s_2}$ represents the tensor product $\ket{s}_1 \otimes \ket{s}_2$, with $0$ denoting the ground state and $1$ the excited state. \\
+	Since the objective is to study the exciton transport between sites, the initial state is define as one site completely in excited state and the other in ground state. The interaction between the two sites is defined by the Hopping Potential \textit{v}, built to allow only exchange between the two excited states, conserving the total number of excitations. In this way
+	the dynamics is restricted to the \textit{single-excitation manifold} and  allows us to effectively reduce the four-dimensional Hilbert space to a two-dimensional subspace, that can be represented by a single qubit built on the excited states $ \left\{ \ket{01}, \ket{10} \right\} $.
+	As already said, the effect induced by the environment is just the \textit{Pure Dephasing}, which essentially destroys the coherence between the two states, facilitating the localization of the exciton.  
 	
+	The key observables analyzed during the time evolution are the Excited States Populations, representing the probability of finding the Excitation in site 1 or 2. Furthermore it's possible to reconstruct the the state vector in the \textit{Bloch Sphere}, which could help visualizing the evolution in time. 
+	
+	The results obtained with the \textit{Collisional Method}, both the Stochastic Trajectories and the Average Dynamics of the $ \rho_S $ (obtained tracing out the Ancilla), will be compared with the Lindblad Master Equation and the Isolated System Dynamics.
 	
 	
 	\section{Computational Implementation}

@@ -10,10 +10,33 @@
 \usepackage{braket}
 \usepackage{tikz}
 \usepackage{cancel}
-\usepackage[top=3cm, bottom=3cm, left=2cm, right=2cm]{geometry}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 \usepackage{graphicx}
 \usepackage{float}
 \usetikzlibrary{arrows.meta, angles, quotes}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+\definecolor{codeblue}{rgb}{0,0,0.6}
+\definecolor{codegreen}{rgb}{0,0.4,0}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{codegray},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{codeblue},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2,
+}
+
+\lstset{style=mystyle}
 
 \allowdisplaybreaks
 
@@ -61,19 +84,21 @@
 	Among the most well-known \textit{Dynamical Maps} there are the \textit{Redfield equation}, which is microscopically derived, and the \textit{Lindblad equation}. The latter is based on the theory of quantum semigroups and is derived with a more mathematical approach to ensure the evolution remains \textit{Completely Positive and Trace Preserving} (CPTP) at all times. In this work, we will specifically focus on the Lindblad master equation, which reads : 
 	
 	\begin{equation}
-		\dot{\rho_{S}} = -i [H, \rho_{S}] + \sum_k \gamma_k \left( L_k \rho_{S} L_k^\dagger - \frac{1}{2} \left[ L_k^\dagger L_k, \rho_{S} \right]_{+} \right)
+		\dot{\rho_{S}} = -i [\hat{H}, \rho_{S}] + \sum_k \gamma_k \left( \hat{L}_k \rho_{S} {\hat{L}_k}^\dagger - \frac{1}{2} \left[ \hat{L}_k^\dagger \hat{L}_k, \rho_{S} \right]_{+} \right) = \hat{\mathcal{L}} \rho_{S}
 		\label{eq:lindblad}
 	\end{equation}
 
-	where $ \gamma_k $ are the \textit{Lindblad rates}, that may be different for every sites; while $ \L_k $ are the \textit{Jump operator}, which describe the environment effect on the system.
+	where $ \gamma_k $ are the \textit{Lindblad rates}, that may be different for every sites; while $ \hat{L}_k $ are the \textit{Jump operator}, which describe the environment effect on the system; eventually $ \hat{\mathcal{L}} $ represents the \textit{Liouvillian Super Operator}.
 		
 	In this specific study, we will focus exclusively on the phenomenon of \textit{pure Dephasing}. This process is responsible for the suppression of quantum coherences between different sites, favoring excitonic transport. 
 	For our model, this mechanism is described by the jump operators 
 	\begin{equation}
-		L_k = \sigma_z^{(k)}
+		\hat{L}_k = \sigma_z^{(k)}
 		\label{eq:jump_operator_z}
 	\end{equation}
 	where $\sigma_z$ is the Pauli matrices acting on the $k$-th site (represented by a qubit). This choice of operator ensures that while the off-diagonal elements of the density matrix (the coherences) decay over time, the diagonal elements (the populations) remain unaffected.
+	
+	\newpage
 	
 	\subsection{Stochastic Unraveling of Quantum Master Equation}
 	
@@ -120,7 +145,11 @@
 	\begin{equation}
 		\mathcal{H}_{Exc} = \mathcal{H}_{Site} + V_{Hopping} = \sum_{j=1}^{N} {\frac{\varepsilon_j}{2} \sigma_{z}^{j} \otimes \mathbb{I}^{\otimes N} } + \sum_{\langle j,j' \rangle} {\frac{V_{j,j'}}{2} \left( \sigma_{x}^{j}\sigma_{x}^{j'} \otimes \mathbb{I}^{\otimes N} + \sigma_{y}^{j}\sigma_{y}^{j'} \otimes \mathbb{I}^{\otimes N} \right)}
 		\label{eq:Exc_Hamiltonian} 
-	\end{equation}  represents the \textit{Isolated System Hamiltonian},representing the internal dynamics of the $N$ sites.The Hopping term specifically is what allows the effective Exciton transfer, since the Collisonal term just facilitates the transport by canceling the coherence created. The summation on \textit{j} runs over the different System's sites.
+	\end{equation}  represents the \textit{Isolated System Hamiltonian},representing the internal dynamics of the $N$ sites.The Hopping term specifically is what allows the effective Exciton transfer, since the Collisonal term just facilitates the transport by canceling the coherence created. The summation on \textit{j} runs over the different System's sites and the  $ \sigma_{\alpha}^j $ term are defined as :
+	\begin{equation}
+		 \sigma_{\alpha}^j  = \mathbb{I}^{\otimes j-1} \otimes \sigma_{\alpha} \otimes \mathbb{I}^{\otimes N-j}
+		 \label{eq:sigma_op_definition}
+	\end{equation}
 	
 	The form of $ \mathcal{H}_{Collision} $ specifically defines the unraveling regime. In order to recover the correct QME form, it's fundamental to correctly initialize the Ancilla's state, which is deeply related to the specific form of \textit{Interaction Hamiltonian}, $ \mathcal{H}_{Collision} $. \\	
 	In this context it's possible to associate the two opposite regime, seen before, with two different configurations of the Collisional Method ( i.e. form of the Collisional Hamiltonian and Ancilla's state initialization ): 
@@ -139,7 +168,13 @@
 			\end{equation}
 			The Ancilla is always initialized in the $ \ket{0_a} $ state and the $ \mathcal{H}_{Coll} $ acts on it as a $ \sigma_{x}^{a_j} $ flipping its state.
 	\end{description}
-
+	In both cases $ c_j $ represents the \textit{Collision Intensity} for every \textit{j-th} site, a constant related to the \textit{Lindblad Rates} $ \gamma_k $ by the equation:
+	\begin{equation}
+		c_j = \sqrt{\gamma_k / \Delta t}
+		\label{eq:c_j_definition} 
+	\end{equation}
+	
+	
 	Once we've defined the $ \mathcal{H}_{Collision} $, it's important to see how it affect the System's evolution. In general the wave function at a time step $ t + \Delta t $ is given by the resolution of the Schr\"odinger Equation, which is :
 	\begin{equation}
 		\ket{\Psi_S (t + \Delta t)} = \mathcal{U} \ket{\Psi_S (t)} = e^{\left(-i \, \mathcal{H}_{CM} \Delta t\right)}\ket{\Psi_S (t)} = e^{\left(-i \, \mathcal{H}_{Exc} \Delta t\right)} e^{\left(-i \, \mathcal{H}_{Coll} \Delta t\right)}\ket{\Psi_S (t)} 
@@ -150,7 +185,10 @@
 		\item Isolated evolution via $ \mathcal{H}_{Exc} $
 		\item Collisional evolution via $ \mathcal{H}_{Coll} $
 	\end{enumerate}
-	Focusing on the collisional evolution we can analytically define the Evolution Operator \textit{U} form and how it modifies the System wf, in the two different limits. Note that in this derivation we will refer to only one site of the System's Hilbert space:
+	Focusing on the collisional evolution we can analytically define the Evolution Operator \textit{U} form and how it modifies the System \textit{wf}, in the two different limits. Note that in this derivation we will refer to only one site of the System's Hilbert space:
+	
+	\newpage
+	
 	\begin{description}
 		\item[Diffusive Limit] 
 		\begin{equation}
@@ -174,7 +212,7 @@
 				\ket{\Psi (t + \Delta t) } = \cos \left(c_j \Delta t \right) \ket{\Psi_S (t)} \otimes \ket{0_a} - i \sin \left(c_j \Delta t \right) \sigma_{z}^{j} \ket{\Psi_S(t)} \otimes \ket{1_a}
 				\label{eq:psi_evol_QJ}
 			\end{equation}
-			In this case we have a modification on the System wf only when we measure $ \ket{1_a} $, but the variation isn't premultiplied by a small factor so the change will be significant. On the other hand the probability of measuring $ \ket{1_a} $ is given by
+			In this case we have a modification on the System \textit{wf} only when we measure $ \ket{1_a} $, but the variation isn't premultiplied by a small factor so the change will be significant. On the other hand the probability of measuring $ \ket{1_a} $ is given by
 			\begin{equation}
 				P_{1_a} = Tr_S \Big[\braket{1_a | \Psi(t + \Delta t)}\braket{\Psi(t + \Delta t) | 1_a}\Big] = \sin^{2}{\left(c_j \Delta t\right)}
 				\label{eq:ancilla_probability}
@@ -191,7 +229,7 @@
 			\begin{enumerate} 
 				\item Isolated System's evolution with $ \mathcal{U}_{Exc} = \exp{\left( -i \, \mathcal{H}_{Exc} \Delta t \right) }$
 				\item Extraction for every different site of a Random Number $\alpha$ in $[0,1]$
-				\item If $ \alpha < \sin^{2}{\left(c_j \Delta t\right)} $ it means that there's been an effective collision that has flipped the initial Ancilla's state $ \ket{0_a} $ to $ \ket{1_a} $ and so the System's wf gets modified by $ \sigma_{z}^{j} $ on every \textit{j-th} site; \\
+				\item If $ \alpha < \sin^{2}{\left(c_j \Delta t\right)} $ it means that there's been an effective collision that has flipped the initial Ancilla's state $ \ket{0_a} $ to $ \ket{1_a} $ and so the System's \textit{wf} gets modified by $ \sigma_{z}^{j} $ on every \textit{j-th} site; \\
 				if $ \alpha > \sin^{2}{\left(c_j \Delta t\right)} $ the system remain unchanged (i.e. application of $ \mathbb{I}^j $ )
 				\item Once all the sites have been processed , measure and store System's Observables at that time step (like population)
 				\item Repeat the algorithm for the next time step
@@ -200,8 +238,8 @@
 			\begin{enumerate} 
 				\item Isolated System's evolution with $ \mathcal{U}_{Exc} = \exp{\left( -i \, \mathcal{H}_{Exc} \Delta t \right) }$
 				\item Extraction for every different site of a Random Number 	$\alpha$ in $[0,1]$
-				\item If $ \alpha < 0.5 $ it means that state $ \ket{0_a} $ has been measured and so the System's wf gets modified via EQ.\eqref{eq:psi_evol_Diff0} for every \textit{j-th} site;
-				otherwise state $ \ket{1_a} $ has been measured and the System's wf gets modified via EQ.\eqref{eq:psi_evol_Diff1}.
+				\item If $ \alpha < 0.5 $ it means that state $ \ket{0_a} $ has been measured and so the System's \textit{wf} gets modified via EQ.\eqref{eq:psi_evol_Diff0} for every \textit{j-th} site;
+				otherwise state $ \ket{1_a} $ has been measured and the System's \textit{wf} gets modified via EQ.\eqref{eq:psi_evol_Diff1}.
 				\item Once all the sites have been processed , measure and store System's Observables at that time step (like population)
 				\item Repeat the algorithm for the next time step
 			\end{enumerate}
@@ -210,7 +248,7 @@
 		Since the update operators in both limits are unitary, the wave function norm is theoretically preserved at each step. However, to prevent numerical errors from accumulating over long simulations, it is standard practice to enforce renormalization after every time step.
 		
 	\subsection{Complete Evolution and Ancilla Trace}
-	While the stochastic unraveling focuses on individual trajectories of the wf, the \textit{Collisional Mode}l can also be formulated deterministically for the complete Density Matrix $ \rho_S \otimes \rho_A $. \\
+	While the stochastic unraveling focuses on individual trajectories of the \textit{wf}, the \textit{Collisional Mode}l can also be formulated deterministically for the complete Density Matrix $ \rho_S \otimes \rho_A $. \\
 	The evolution of the system's Density Matrix $\rho_S$ over a time step is obtained by evolving the total state and then performing a \textit{partial trace} over the Ancilla's degrees of freedom. This operation mathematically corresponds to averaging over all possible measurement outcomes of the ancilla. \\
 	In this way we are creating a so called \textit{Dynamical Map} $ \Phi $, which reads:
 	
@@ -255,7 +293,70 @@
 	\end{itemize}
 	Going into more detail, \texttt{Numpy} works with dense matrices and is made for generic linear algebra operation; instead \texttt{Qutip} works with \texttt{Qobj} (Quantum Object), that are sparse matrices with additional metadata describing the physical state (es bra, ket ...) and the associated Hilbert space. 
 	
-	While the algorithmic logic follows a procedural paradigm, this high-level approach allows the code to remain readable and close to the mathematical formulation 
-		
+	For completeness, also the \texttt{Scipy} library is used, in particular its \texttt{Scipy.linalg} module, dedicated to linear algebra, from which it's imported the \texttt{expm} function, that allows to numerically build up the Evolution in time operator $\mathcal{U}$ as matrix exponential of the Hamiltonian. 
+	
+	While the algorithmic logic follows a procedural paradigm, this high-level approach allows the code to remain readable and close to the mathematical formulation.
+	
+	\paragraph{Technical note :} since \texttt{Qobj} and \texttt{Np array} are incompatible, it's often used the following control line that converts a \texttt{Qobj} in a \texttt{Np array}, since the core calculations rely on \texttt{Numpy}
+	
+	\begin{lstlisting}[language=Python]
+		# Convert a generic variable 'var' to a dense array if it is a Qobj
+		var = var.full() if hasattr(var, "full") else np.array(var, dtype=complex)
+		# or a List element by element
+		List = [L_element.full() if hasattr(L_element, "full") else np.array(L_element, dtype=complex) for L_element in List]
+	\end{lstlisting}
+	This control line checks if an object has the \texttt{.full()} method (typical of QuTiP objects) and extracts the dense matrix; otherwise, it treats the object as a standard array.
+	
+	\newpage
+	
+	\subsection{Structure of the \texttt{Main\_Dynamic.py} Script}	
+	The \texttt{main\_dynamic} script represents the core of the computational implementation. The program is organized into distinct logical blocks, each dedicated to a specific task; this section is dedicated to the description and explanation of the algorithmic choices and the data structures of each section.
+	
+	\subsubsection{System Definition and Evolution Operators}
+	The first section is dedicated to the Hamiltonians construction and the definition of the Evolution Operator $ \mathcal{U}(\Delta t) $.
+	The first is modularized into dedicated functions:
+	\begin{enumerate}
+		\item \texttt{system\_Hamiltonian} : constructs the System's Hamiltonian matrix based on Eq.\eqref{eq:Exc_Hamiltonian} with the input parameters, defined in the \texttt{Parameters} section: \texttt{N\_site} (number of sites), \texttt{E} (array of site energies, \textit{randomly generated}) and \texttt{V\_pot}, array that contains the coupling constants for every unique pair of sites $(i, j)$ with $i < j$, organized as 
+		\begin{equation*}
+			V_{pot} = [V_{12}, V_{13}, \dots, V_{1N_{site}}, V_{23}, \dots, V_{N_{site}-1,N_{site}}]
+			\label{potential_definition}
+		\end{equation*}
+		in the Exciton Dimer $ N_{site} = 2 $ case this reduces to a single element array $ V_{pot} = [V_{12}] $. \\
+		It's important noting that this definition of $ V_{pot} $ defines an \textit{all-to-all connectivity} and may be transform in a "Nearest-Neighbor Interaction" modulating the single value. \\
+		Giving this input the function returns a Numpy matrix representing the System Hamiltonian.
+		\item \texttt{interaction\_Hamiltonian\_N\_ancillas}: constructs the Interaction Hamiltonian both in the \textit{Diffusive Limit} Eq.\eqref{eq:diff_initialization} and in the \textit{Quantum Jump Limit} Eq.\eqref{eq:QJ_initialization}; the input required are \texttt{N\_site} and \texttt{c\_CM} (constant Collisional Methods), which is an array containing the value of $ c_j $ defined in Eq.\eqref{eq:c_j_definition} for every site.
+		\item \texttt{hamiltonian\_N\_ancillas} : constructs the Complete Hamiltonian, firstly expanding the System Hamiltonian in the complete Hilbert Space (i.e. System + Ancilla) and then summing it to the Interaction Hamiltonian (already construct in the total space) 
+	\end{enumerate}
+	It's important to focus on how formally an Hamiltonian operating on different sites is constructed : following the formal definition given in Eq.\eqref{eq:sigma_op_definition}, i.e. any local operator acting on the $j$-th site can be expressed as a tensor product of the operator on the target site and identity matrices on all others. This can be computationally achieved by initializing a list of $ 2\times2 \, \mathbb{I} $, representing the complete space, and replacing in the \textit{j-th} position the operator acting on the \textit{j-th} site. Finally the tensor product of the list elements is computed using the \texttt{QuTip} function \texttt{tensor}. In the case of $ \mathcal{H}_{Coll} $ the composite System has dimension $ 2^{2N_{site}} $ and two operators are placed simultaneously: $\sigma_z$ on the $j$-th system site and the corresponding ancilla operator on the \textit{(N+j)-th} site as reported in the following example:
+	\begin{lstlisting}[language=Python]
+		# Construction of Collisional Hamiltonian 
+		for j in range(N_site):
+			op_list = [identity(2) for _ in range(2 * N_site)]  #list of identity 
+			op_list[j] = sigmaz()      # Acts on the j site
+			op_list[N_site + j] = anc_op  # Acts on the j ancilla, with index N + j
+			H_term = (c_CM[j] * tensor(op_list)).full() # tensor product for list's element
+			H_int += H_term
+	\end{lstlisting}
+	
+	The Evolution Operator $ \mathcal{U} = \exp{\left(-i \mathcal{H} \Delta t \right)} $ is computationally constructed in two different ways:
+	\begin{itemize}
+		\item with the \texttt{Scipy.linalg} function \texttt{expm}
+		\item Diagonalizing the $ \mathcal{H} $ matrix with the \texttt{Numpy.linalg} function \texttt{Numpy.linalg.eigh}, using the \textit{Eigenvalues w} to build a diagonal matrix with element $ \mathcal{U}_{diag} = \exp{\left(-i w \Delta t \right)} $ and finally, using the \textit{Eigenvectors V}, moving back to the original basis $ \mathcal{U} = V \, \mathcal{U}_{diag} V^{\dagger} $.
+	\end{itemize} 
+		 
+	\subsubsection{Lindblad Evolution}
+	In this section the benchmark evolution via \textit{Lindblad Master Equation} is calculated. The \textit{Jump Operators} $ L_k $ and the \textit{Lindblad rates} $ \gamma_k $ are defined in the \texttt{Parameters} section.\\
+	First the \textit{Liouvillian Superoperator} is computationally construct with the \texttt{Liouvillian} function. The effective time evolution, related to Eq.\eqref{eq:lindblad}, is implemented by the \texttt{Lindblad\_evo} function. In this approach the Lindblad ME is solved in the \textit{Liouvillian Space}, where the System's Density Matrix is vectorized and allowing the Liouvillian to be represented as a square matrix. This formulation enables the construction of the Time Evolution Operator $ \mathcal{U} $ via either the \texttt{expm} method or diagonalization, as described previously. Once the $ \mathcal{U} $ has been defined and applied the resulting update vectorized state $ \rho_{S} (t + \Delta t) $ is stored in \texttt{rho\_vec\_list}, a list containing the resulting $ \rho_{S} $ at every time step. Finally this list is returned in vectorized form or reshaped in standard Density Matrices.
+	
+	\subsubsection{Isolated System Evolution}
+	The second benchmark dynamics is the one obtained without the \textit{Collisional Hamiltonian}, i.e. governed only by $ \mathcal{H}_{Exc} $. The trajectory can be easily obtained evolving the System wave function with the Unitary Time Evolution Operator $ \mathcal{U} = \exp{\left(-i \, \mathcal{H}_{Exc} \Delta t \right)} $. To optimize memory usage, the complete \textit{wf} is not stored at every step; instead the site's Population are computed and stored at every time step in \texttt{pop\_traj\_isolated}, a 2D array with dimensions $ [N_{Site}, \text{Time Steps}] $. To extract this observables it's used the \texttt{projectors} list, which contains projectors operators on the excited states in matrix form.
+	
+	For the specific case of the Exciton Dimer, the expected physical behavior is a coherent, continuous oscillation of the population between the two sites (Rabi oscillations).
+	
+	\subsubsection{Trace on Ancilla Evolution}
+	
+	
+	
+	
 	
 \end{document}

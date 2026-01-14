@@ -238,7 +238,24 @@
 	
 	
 	\section{Computational Implementation}
+	Once the theoretical background is defined, we now focus on the computational implementation. \\
+	The objective is the \textit{Numerically} generation of \textit{Stochastic Trajectories} that will be benchmarked as described above. This task is performed by the \texttt{Main\_Dynamics.py} program, where the mathematical formalism of \textit{Collisional Method} is translate into a time-discrete simulation, reproducing the iterative interaction between the System and the Ancilla reservoir, in the \textit{Quantum Jump} and \textit{Diffusive Limit}. \\
+	For the Results visualization two dedicated Jupyter Notebooks were developed:
+	\begin{enumerate}
+		\item \texttt{Plot.ipynb} : based on the Python library \texttt{Matplotlib}, this program gives some examples of the 2D plot that can be made with the dynamics results; the \textit{\%matplotlib ipympl} command enable interactive data exploration directly within the notebook interface.
+		\item \texttt{Bloch\_Sphere.ipynb} : based on the visualization tools of the Python library \texttt{Qutip}, this program generates an animated GIF representing the dynamics on the State Vector on the Bloch Sphere, providing a 3D representation of the dynamics.
+	\end{enumerate}
 	
+	
+	\subsection{Language Choice and Libraries}
+	The simulation is implemented in \textit{Python}, chosen for its object-oriented features to treat mathematical entities such as wave functions and operators as high-level objects. In this regard, two fundamental libraries are used:
+	\begin{itemize}
+		\item \texttt{Numpy} : used for linear algebra operations, allows direct representation of quantum states as vectors, Hamiltonians as matrices and provides tools for optimized operations such as matrix multiplication.
+		\item \texttt{Qutip}(\textit{Quantum Toolbox in Python}) : employed for specific quantum mechanical operations that require structural knowledge of the Hilbert space; this library provides complete Master Equation solver too.
+	\end{itemize}
+	Going into more detail, \texttt{Numpy} works with dense matrices and is made for generic linear algebra operation; instead \texttt{Qutip} works with \texttt{Qobj} (Quantum Object), that are sparse matrices with additional metadata describing the physical state (es bra, ket ...) and the associated Hilbert space. 
+	
+	While the algorithmic logic follows a procedural paradigm, this high-level approach allows the code to remain readable and close to the mathematical formulation 
 		
 	
 \end{document}

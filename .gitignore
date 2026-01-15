@@ -2,9 +2,6 @@
 .ipynb_checkpoints/
 */.ipynb_checkpoints/*
 
-# Directories
-Results/
-
 # Tex Files
 *.toc
 *.aux

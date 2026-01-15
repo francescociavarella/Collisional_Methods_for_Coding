@@ -21,6 +21,18 @@
 \definecolor{codeblue}{rgb}{0,0,0.6}
 \definecolor{codegreen}{rgb}{0,0.4,0}
 
+\usepackage{forest}
+\usetikzlibrary{shadows, arrows.meta}
+
+\tikzset{
+	folder style/.style={
+		draw=black!50,
+		top color=white, bottom color=gray!10,
+		rounded corners, font=\ttfamily\small,
+		drop shadow
+	}
+}
+
 \lstdefinestyle{mystyle}{
 	backgroundcolor=\color{codegray},   
 	commentstyle=\color{codegreen},
@@ -69,8 +81,10 @@
 	\newpage
 	
 	\section{Introduction}
+	\label{sec:intro}
 	
 	\subsection{Open Quantum System an Quantum Master Equation}
+	\label{sub:open_quantum_sys_QME}
 	First, it is essential to frame the scope of this project within the field of \textit{Environment-Assisted Quantum Transport (ENAQT)}. This framework focuses on evaluating the effects of the surrounding environment on open quantum systems. The latter are usually constituted of a set of qubits representing different chromophores' energy states.
 	Such systems are typically described using the \textit{density matrix} formalism, where we define $ \rho_S = \sum_{k}^{N}{\ket{\Psi_{k}^{S}}\bra{\Psi_{k}^{S}}} $.\\
 	This approach is fundamental as it allows for the treatment of quantum systems subject to classical statistical uncertainty (i.e. mixed states), combining quantum coherent superposition with classical probabilities.
@@ -84,16 +98,16 @@
 	Among the most well-known \textit{Dynamical Maps} there are the \textit{Redfield equation}, which is microscopically derived, and the \textit{Lindblad equation}. The latter is based on the theory of quantum semigroups and is derived with a more mathematical approach to ensure the evolution remains \textit{Completely Positive and Trace Preserving} (CPTP) at all times. In this work, we will specifically focus on the Lindblad master equation, which reads : 
 	
 	\begin{equation}
-		\dot{\rho_{S}} = -i [\hat{H}, \rho_{S}] + \sum_k \gamma_k \left( \hat{L}_k \rho_{S} {\hat{L}_k}^\dagger - \frac{1}{2} \left[ \hat{L}_k^\dagger \hat{L}_k, \rho_{S} \right]_{+} \right) = \hat{\mathcal{L}} \rho_{S}
+		\dot{\rho_{S}} = -i [\hat{H}, \rho_{S}] + \sum_j \gamma_j \left( \hat{L}_j \rho_{S} {\hat{L}_j}^\dagger - \frac{1}{2} \left[ \hat{L}_j^\dagger \hat{L}_j, \rho_{S} \right]_{+} \right) = \hat{\mathcal{L}} \rho_{S}
 		\label{eq:lindblad}
 	\end{equation}
 
-	where $ \gamma_k $ are the \textit{Lindblad rates}, that may be different for every sites; while $ \hat{L}_k $ are the \textit{Jump operator}, which describe the environment effect on the system; eventually $ \hat{\mathcal{L}} $ represents the \textit{Liouvillian Super Operator}.
+	where $ \gamma_j $ are the \textit{Lindblad rates}, that may be different for every sites; while $ \hat{L}_j $ are the \textit{Jump operator}, which describe the environment effect on the system; eventually $ \hat{\mathcal{L}} $ represents the \textit{Liouvillian Super Operator}.
 		
 	In this specific study, we will focus exclusively on the phenomenon of \textit{pure Dephasing}. This process is responsible for the suppression of quantum coherences between different sites, favoring excitonic transport. 
 	For our model, this mechanism is described by the jump operators 
 	\begin{equation}
-		\hat{L}_k = \sigma_z^{(k)}
+		\hat{L}_j = \sigma_z^{(k)}
 		\label{eq:jump_operator_z}
 	\end{equation}
 	where $\sigma_z$ is the Pauli matrices acting on the $k$-th site (represented by a qubit). This choice of operator ensures that while the off-diagonal elements of the density matrix (the coherences) decay over time, the diagonal elements (the populations) remain unaffected.
@@ -101,6 +115,7 @@
 	\newpage
 	
 	\subsection{Stochastic Unraveling of Quantum Master Equation}
+	\label{sub:unraveling}
 	
 	The concept of \textit{unraveling} refers to the decomposition of the deterministic Master Equation into a statistical ensemble of single stochastic trajectories. Instead of directly evolving the density matrix $ \rho_{S} $, which describes the average state of the ensemble, one evolves a single wave function $ \ket{\psi(t)} $ subject to random events, which represents the direct effect of the environment on the quantum state. The full dynamics of the density matrix is then reconstructed by averaging over a large number of these realizations:
 	\begin{equation}
@@ -121,6 +136,7 @@
 	\end{itemize}
 	
 	\subsection{Collisional Method}
+	\label{sub:CM}
 	While there are several established algorithms for unraveling the Quantum Master Equation—such as the \textit{Stochastic Schr\"odinger Equation} (SSE) or the \textit{Monte Carlo Wave Function} (MCWF) method, this work focuses on the \textit{Collisional Model} framework.
 	
 	The primary objective is to implement and explore this approach, which reconstructs the continuous dynamics through a sequence of discrete interactions, called \textit{Collisions}, occurring over a finite time step $\Delta t$.
@@ -157,20 +173,20 @@
 	\begin{description}
 		\item[Diffusive Limit]
 		\begin{equation}
-			\mathcal{H}_{Coll} = \sum_{j=1}^{N}{c_j \sigma_{z}^{j} \otimes \sigma_{z}^{a_j}} \text{\quad and \quad} \rho_{a} = \frac{1}{2} \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}
+			\mathcal{H}_{Coll} = \sum_{j=1}^{N}{c_j \sigma_{z}^{j} \otimes \sigma_{z}^{a_j}} \text{\quad and \quad} \rho_{A} = \frac{1}{2} \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}
 			\label{eq:diff_initialization}
 		\end{equation}
 		The Ancilla is in the complete mixed state, i.e. given a reservoir of Ancillas, there's the 0.5 probability of finding it in the $ \ket{0_a} $ state and so the same for $ \ket{1_a} $ state; in this case  the $ \mathcal{H}_{Coll} $ acts on the Ancilla as a $ \sigma_{z}^{a_j} $, introducing a phase shift on the sate.
 		\item[Quantum Jump Limit] 
 			\begin{equation}
-				\mathcal{H}_{Coll} = \sum_{j=1}^{N}{c_j \sigma_{z}^{j} \otimes \sigma_{x}^{a_j}} \text{\quad and \quad} \rho_{a} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}
+				\mathcal{H}_{Coll} = \sum_{j=1}^{N}{c_j \sigma_{z}^{j} \otimes \sigma_{x}^{a_j}} \text{\quad and \quad} \rho_{A} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}
 				\label{eq:QJ_initialization}
 			\end{equation}
 			The Ancilla is always initialized in the $ \ket{0_a} $ state and the $ \mathcal{H}_{Coll} $ acts on it as a $ \sigma_{x}^{a_j} $ flipping its state.
 	\end{description}
-	In both cases $ c_j $ represents the \textit{Collision Intensity} for every \textit{j-th} site, a constant related to the \textit{Lindblad Rates} $ \gamma_k $ by the equation:
+	In both cases $ c_j $ represents the \textit{Collision Intensity} for every \textit{j-th} site, a constant related to the \textit{Lindblad Rates} $ \gamma_j $ by the equation:
 	\begin{equation}
-		c_j = \sqrt{\gamma_k / \Delta t}
+		c_j = \sqrt{\gamma_j / 4\Delta t}
 		\label{eq:c_j_definition} 
 	\end{equation}
 	
@@ -186,9 +202,7 @@
 		\item Collisional evolution via $ \mathcal{H}_{Coll} $
 	\end{enumerate}
 	Focusing on the collisional evolution we can analytically define the Evolution Operator \textit{U} form and how it modifies the System \textit{wf}, in the two different limits. Note that in this derivation we will refer to only one site of the System's Hilbert space:
-	
-	\newpage
-	
+
 	\begin{description}
 		\item[Diffusive Limit] 
 		\begin{equation}
@@ -222,6 +236,7 @@
 	For more information about the equation derivation please see the \href{run:./Demonstration.pdf}{Demonstration file}, in particular section 1.1 and 2.1. Moreover all the form of $ \ket{\Psi (t + \Delta t) } $ can be lead back to a Lindblad evolution, as specified in section 1.3 and 2.3
 	
 	\subsection{Theoretical Algorithm}
+	\label{sub:theoretical_algorithm}
 	Concatenating the evolution given by Eq.\eqref{eq:psi_evol_Diff0} and Eq.\eqref{eq:psi_evol_Diff1} or Eq.\eqref{eq:psi_evol_QJ}, it's possible to create a Stochastic Algorithm that creates a Trajectory in the two limits; averaging then different trajectories realizations it's possible to recover the Lindblad evolution.
 	
 	\begin{description}
@@ -248,6 +263,7 @@
 		Since the update operators in both limits are unitary, the wave function norm is theoretically preserved at each step. However, to prevent numerical errors from accumulating over long simulations, it is standard practice to enforce renormalization after every time step.
 		
 	\subsection{Complete Evolution and Ancilla Trace}
+	\label{sub:complete_evolution}
 	While the stochastic unraveling focuses on individual trajectories of the \textit{wf}, the \textit{Collisional Mode}l can also be formulated deterministically for the complete Density Matrix $ \rho_S \otimes \rho_A $. \\
 	The evolution of the system's Density Matrix $\rho_S$ over a time step is obtained by evolving the total state and then performing a \textit{partial trace} over the Ancilla's degrees of freedom. This operation mathematically corresponds to averaging over all possible measurement outcomes of the ancilla. \\
 	In this way we are creating a so called \textit{Dynamical Map} $ \Phi $, which reads:
@@ -261,6 +277,7 @@
 	Thus, the Collisional Model serves as a rigorous microscopic derivation of the Lindblad dynamics.
 	 	
 	\section{Case Study : Exciton Dimer}
+	\label{sec:exciton_dimer}
 	Since this work is a preliminary study of \textit{Collisional Methods}, the system consider is one of the simplest relevant to quantum transport: the \textit{Exciton Dimer}. This system consists of two sites, where each site is modeled as a two-level system (qubit). The computational basis for the composite Hilbert space is given by: 
 	\begin{equation}
 		\left\{\ket{00}, \ket{01}, \ket{10}, \ket{11} \right\}
@@ -276,6 +293,7 @@
 	
 	
 	\section{Computational Implementation}
+	\label{sec:comp_implemnt}
 	Once the theoretical background is defined, we now focus on the computational implementation. \\
 	The objective is the \textit{Numerically} generation of \textit{Stochastic Trajectories} that will be benchmarked as described above. This task is performed by the \texttt{Main\_Dynamics.py} program, where the mathematical formalism of \textit{Collisional Method} is translate into a time-discrete simulation, reproducing the iterative interaction between the System and the Ancilla reservoir, in the \textit{Quantum Jump} and \textit{Diffusive Limit}. \\
 	For the Results visualization two dedicated Jupyter Notebooks were developed:
@@ -286,6 +304,7 @@
 	
 	
 	\subsection{Language Choice and Libraries}
+	\label{sub:langauge_libraries}
 	The simulation is implemented in \textit{Python}, chosen for its object-oriented features to treat mathematical entities such as wave functions and operators as high-level objects. In this regard, two fundamental libraries are used:
 	\begin{itemize}
 		\item \texttt{Numpy} : used for linear algebra operations, allows direct representation of quantum states as vectors, Hamiltonians as matrices and provides tools for optimized operations such as matrix multiplication.
@@ -309,10 +328,13 @@
 	
 	\newpage
 	
-	\subsection{Structure of the \texttt{Main\_Dynamic.py} Script}	
-	The \texttt{main\_dynamic} script represents the core of the computational implementation. The program is organized into distinct logical blocks, each dedicated to a specific task; this section is dedicated to the description and explanation of the algorithmic choices and the data structures of each section.
+	\subsection{Structure of the \texttt{Main\_Dynamic.py} Script}
+	\label{sub:main_dynamics_structure}	
+	The \texttt{main\_dynamic} script represents the core of the computational implementation. Beyond the computation of Evolution Trajectories, this code explored the \textbf{Convergence Limit} of the model, by testing different $ \Delta t $ values and Number of Trajectories $ N_{Traj} $ to average over. With this approach the main loop is run multiple times with different value of the two parameters, in order to eventually compare the results. The variation of $\Delta t$ necessitates a dynamic update of the physical parameters: specifically, the interaction coefficients $ c_j = \sqrt{\gamma_j / 4\Delta t} $ valuesare recalculated at each $ \Delta t $ variation. \\
+	The program is organized into distinct logical blocks, each dedicated to a specific task; this section is dedicated to the description and explanation of the algorithmic choices and the data structures of each section.
 	
 	\subsubsection{System Definition and Evolution Operators}
+	\label{subsub:Hamiltonians_U}
 	The first section is dedicated to the Hamiltonians construction and the definition of the Evolution Operator $ \mathcal{U}(\Delta t) $.
 	The first is modularized into dedicated functions:
 	\begin{enumerate}
@@ -338,6 +360,8 @@
 			H_int += H_term
 	\end{lstlisting}
 	
+	\newpage
+	
 	The Evolution Operator $ \mathcal{U} = \exp{\left(-i \mathcal{H} \Delta t \right)} $ is computationally constructed in two different ways:
 	\begin{itemize}
 		\item with the \texttt{Scipy.linalg} function \texttt{expm}
@@ -345,17 +369,154 @@
 	\end{itemize} 
 		 
 	\subsubsection{Lindblad Evolution}
-	In this section the benchmark evolution via \textit{Lindblad Master Equation} is calculated. The \textit{Jump Operators} $ L_k $ and the \textit{Lindblad rates} $ \gamma_k $ are defined in the \texttt{Parameters} section.\\
+	\label{subsub:lindblad_evo}
+	In this section the benchmark evolution via \textit{Lindblad Master Equation} is calculated. The \textit{Jump Operators} $ L_j $ and the \textit{Lindblad rates} $ \gamma_j $ are defined in the \texttt{Parameters} section.\\
 	First the \textit{Liouvillian Superoperator} is computationally construct with the \texttt{Liouvillian} function. The effective time evolution, related to Eq.\eqref{eq:lindblad}, is implemented by the \texttt{Lindblad\_evo} function. In this approach the Lindblad ME is solved in the \textit{Liouvillian Space}, where the System's Density Matrix is vectorized and allowing the Liouvillian to be represented as a square matrix. This formulation enables the construction of the Time Evolution Operator $ \mathcal{U} $ via either the \texttt{expm} method or diagonalization, as described previously. Once the $ \mathcal{U} $ has been defined and applied the resulting update vectorized state $ \rho_{S} (t + \Delta t) $ is stored in \texttt{rho\_vec\_list}, a list containing the resulting $ \rho_{S} $ at every time step. Finally this list is returned in vectorized form or reshaped in standard Density Matrices.
 	
 	\subsubsection{Isolated System Evolution}
-	The second benchmark dynamics is the one obtained without the \textit{Collisional Hamiltonian}, i.e. governed only by $ \mathcal{H}_{Exc} $. The trajectory can be easily obtained evolving the System wave function with the Unitary Time Evolution Operator $ \mathcal{U} = \exp{\left(-i \, \mathcal{H}_{Exc} \Delta t \right)} $. To optimize memory usage, the complete \textit{wf} is not stored at every step; instead the site's Population are computed and stored at every time step in \texttt{pop\_traj\_isolated}, a 2D array with dimensions $ [N_{Site}, \text{Time Steps}] $. To extract this observables it's used the \texttt{projectors} list, which contains projectors operators on the excited states in matrix form.
+	\label{subsub:isolated_evo}
+	The second benchmark dynamics is the one obtained without the \textit{Collisional Hamiltonian}, i.e. governed only by $ \mathcal{H}_{Exc} $. The trajectory can be easily obtained evolving the System wave function with the Unitary Time Evolution Operator $ \mathcal{U} = \exp{\left(-i \, \mathcal{H}_{Exc} \Delta t \right)} $. To optimize memory usage, the complete \textit{wf} is not stored at every step; instead the site's Population are computed and stored at every time step in \texttt{pop\_traj\_isolated}, a 2D array with dimensions $ [N_{Site},  N_{t\, Steps}] $. To extract this observables it's used the \texttt{projectors} list, which contains projectors operators on the excited states in matrix form.
 	
 	For the specific case of the Exciton Dimer, the expected physical behavior is a coherent, continuous oscillation of the population between the two sites (Rabi oscillations).
 	
 	\subsubsection{Trace on Ancilla Evolution}
+	\label{subsub:trace_anc_evo}
+	The first dynamics simulated using \textit{Collisional Methods} is the one based on the deterministic evolution of $ \rho_{S} \otimes \rho_A $ with 
+	\begin{equation}
+		\mathcal{U}_{CM} = \exp{\left(-i \, \mathcal{H}_{CM}\Delta t\right)} = \exp{\left(-i \, \left(\mathcal{H}_{Exc} + \mathcal{H}_{Coll}\right) \Delta t \right) } 
+	\end{equation} 
+	At each step, the Ancilla's degrees of freedom are traced out, as described in Section \ref{sub:complete_evolution}. \\
+	This process is implemented in the \texttt{compute\_trace\_ancilla} function. After constructing the Ancilla's Density Matrix, either in the \textit{Quantum Jump} or \textit{Diffusive Limit}, and the $ \mathcal{U}_{CM} $ operator, the function follows this algorithm to compute the evolution for every timestep:
+	\begin{enumerate}
+		\item Expansion in the System-Ancilla composite Hilbert space by tensor product between $ \rho = \rho_{S} \otimes \rho_A $
+		\item Unitary Evolution of the total Density Matrix : $ \rho(t + \Delta t) =  \mathcal{U}_{CM}(\Delta t) \, \rho (t) \, \mathcal{U}_{CM}^{\dagger}(\Delta t) $
+		\item \textit{Partial Trace} over the Ancilla's degree of freedom
+		\item Using the \texttt{projectors} list, calculation and storage of every site's Population in \texttt{pops\_complete}, a 2D array with dimensions $ [N_{Site},  N_{t\, Steps}] $
+	\end{enumerate}
+	Focusing on the \textit{Partial Trace} operation, it's computed using two important \texttt{Numpy} functions:
+	\begin{lstlisting}[language=python]
+		# 3 : Partial Trace on the ancilla's degree of freedom
+		rho_tot_reshaped = rho_tot.reshape(dim_sys, dim_anc, dim_sys, dim_anc) 
+		rho_sys = np.trace(rho_tot_reshaped, axis1=1, axis2=3) 
+	\end{lstlisting}
+	The first line reshapes the 2D density matrix into a \textit{Block Matrix} with $ N_{Site} \times N_{Site} $ blocks and indices $(i_S, \alpha_A, j_S, \beta_A)$. This structure explicitly separates the System and Ancilla indices.\\
+	The second line computes the trace contraction over the Ancilla indices (axis 1 and 3), effectively summing the diagonal elements of the Ancilla subspace for every System configuration. This translates mathematically into:
+	 \begin{equation}
+	 	\rho_{S_{i_S,j_S}} = \text{Tr}_A \left[\rho\right] = \sum_{\alpha_A=\beta_A}{\rho_{Tens}\left[i_S, \alpha_A, j_S, \beta_A\right]}
+	 \end{equation}
+	 	
+	\paragraph{Remark :} Note that in this case the\textit{Trotter-Suzuki approximation} on the Time Evolution Operator is \textbf{not} applied, i.e. it is construct with the total $\mathcal{H}_{CM}$ in Eq.\eqref{eq:CM_hamiltonian}. With this approach the trajectory obtained is exact (except for the time discretization error) and not affected by the error introduced by the \textit{Trotter-Suzuki approximation} : $ \mathcal{O}(\Delta t^2 / m^2) $ at first order.
 	
+	\subsubsection{Stochastic Trajectory}
+	\label{sub:stochastic_trajectory}
+	This section is dedicated to the computation of the \textit{Stochastic Trajectory} generated by the \textit{Collisional Methods}. 
+	Before dealing with the algorithm, it's fundamental to define define the quantities calculated by the algorithm and their storage structure:
+	\begin{itemize}
+		\item \texttt{pop\_traj} : 3D array with dimension $ [N_{Site}, N_{t\, Steps}, N_{Trajectories}] $; stores the population of each site at every time step for each independent trajectory.
+		\item \texttt{avg\_pop\_traj} : 2D array with dimension $ [N_{Site}, N_{t\, Steps}] $; stores the average value over different trajectories of each site's Population at every time step.
+		\item \texttt{r\_x, r\_y, r\_z} : 2D arrays with dimension $ [N_{t\, Steps}, N_{Trajectories}] $; store the Components of the \textit{Bloch State Vector} projected onto the subspace of the Single-Exciton states and computed via the \texttt{compute\_Bloch\_Sphere} function, valid specifically for the Exciton Dimer case.
+		\item \texttt{avg\_r\_x, avg\_r\_y, avg\_r\_z} : 1D arrays with dimension $ [N_{t\, Steps}] $; stores average value over different trajectories of the \textit{Bloch State Vector} components.
+		\item \texttt{count} : 1D array with dimension $ [N_{Trajectories}] $; stores the cumulative number of measurement of $ \ket{1_a} $ that occurred during the entire trajectory, for each trajectory.
+		\item \texttt{avg\_count} : float, represents the average value of count calculated over all $ N_{Traj} $ Trajectories.
+	\end{itemize}
+	The Evolution Algorithm relies on the logic described in Section \ref{sub:theoretical_algorithm}. The simulation allows switching between the \textit{Quantum Jump} and \textit{Diffusive Limit} by simply modifying the \texttt{method} parameter.\\
+	These two regimes differ in:
+	\begin{itemize}
+		\item the Probability of measuring the state $ \ket{1_a} $
+		\item the Evolution applied to the state's \textit{wf}
+	\end{itemize}
+	The steps of the Algorithm for a Single Trajectory are:
+	\begin{enumerate}
+		\item Evolution of the complete \textit{wf} with only Site's Evolution Operator $ \mathcal{U}_{Exc}(\Delta t) = \exp{\left(-i \, \mathcal{H}_{Exc} \Delta t \right)} $
+		\item Extraction of a Random Number $ \alpha $ in $ [0,1] $ for each System's site
+		\item If $ \alpha < $ \textit{probability condition} defined by the dynamics limit, apply to the selected site's state the evolution related to the measurement of $ \ket{1_a} $. Otherwise apply the evolution defined by the measurement of $ \ket{0_a} $ (see Eq.\eqref{eq:psi_evol_Diff0} and Eq.\eqref{eq:psi_evol_Diff1} or Eq.\eqref{eq:psi_evol_QJ})
+		\item Once all the sites have been processed, Normalization of the resulting complete state
+		\item Measurement and storage of the site Populations (using the \texttt{Projectors} list) and the Bloch State Vector components (using the \texttt{compute\_Bloch\_Sphere}) in the appropriate arrays.
+		\item Repeat the algorithm for the next time step, until the total \textit{Dynamics Time} is covered.
+		\item Once the Single Trajectory is completed, restart the Algorithm for a new Independent Trajectory.
+		\item Finally , once all trajectories are computed and stored, compute the Average Value over different trajectories at every time step, for the Populations and \textit{Bloch State Vector} components.
+	\end{enumerate} 
 	
+	\subsubsection{Parameters}
+	\label{subsub:parameters}
+	This section initializes all physical constants and simulation variables required for the dynamics.\\
+	The parameters are organized into four logical categories:
+	\begin{enumerate}
+		\item System Parameters: 
+		\begin{itemize}
+			\item \texttt{N\_site}: Number of system sites ($N=2$).
+			\item \texttt{E}: Site's energies initialized with random Gaussian disorder around the value $1.5$.
+			\item \texttt{V\_array}: Hopping potential between sites, as defined Section \ref{subsub:Hamiltonians_U}.
+		\end{itemize}
+		
+		\item Dynamics Parameters: 
+		\begin{itemize}
+			\item \texttt{dt\_list}: List of different time steps $\Delta t$ that defines the related \texttt{steps\_list} and \texttt{times\_list}.
+			\item \texttt{N\_traj\_list}: List of Number of Trajectories.
+			\item \texttt{tf}: Final simulation time.
+		\end{itemize}
+		
+		\item Interaction Constants: 
+		\begin{itemize}
+			\item \texttt{g\_j}: List of Lindblad dephasing rate $\gamma_j$ for every \textit{j-th} site.
+			\item \texttt{c\_CM\_list}: The collisional strength coefficients, recalculated for each $\Delta t$ as $c = \sqrt{\gamma / 4\Delta t}$.
+		\end{itemize}
+		
+		\item Initial States and Operators: 
+		\begin{itemize}
+			\item \texttt{psi\_sys\_initial}: System initialized in the state $\ket{01}$.
+			\item \texttt{rho\_anc}: Ancilla state, defined as Pure ($\ket{0}\bra{0}$) for QJ or Mixed ($\mathbb{I}/2$) for Diffusive limit.
+			\item \texttt{L\_j} : List of Lindblad Jump Operator
+			\item \texttt{projectors}: List of measurement operators ($P_{10}, P_{01}$) used to extract populations.
+		\end{itemize}
+
+		\item Dynamics Limit: \\
+		the \texttt{INTERACTION\_LIMIT} parameter defines the \texttt{method} variable, allowing the simulation to be performed in either the \textit{Quantum Jump} or \textit{Diffusive Limit}.
+	\end{enumerate}
+	
+	\subsection{Simulation Execution and Data Storage}
+	Once all physical parameters, initial states, and dynamics functions have been defined, the simulations could be run for different $ \Delta t $ and $ N_{Traj} $ values, in order to test \textit{Convergence Properties}. This is achieved through nested loops iterating over the defined parameter lists.	All resulting data are stored and organized in the \textit{Dictionary} \texttt{results}, which has the following structure:
+	
+\begin{figure}[htbp]
+	\centering
+	\begin{forest}
+		for tree={
+			grow=0,
+			folder style,
+			edge={draw=black!70, -Latex},
+			s sep=1mm,
+			l sep=10mm,
+			anchor=west, child anchor=west, parent anchor=east,
+			calign=child, calign primary child=1,
+			font=\scriptsize,
+			inner sep=2pt
+		}
+		[results, fill=blue!20, calign=center
+		[dt\_list, fill=blue!10, calign=center
+		[parameters, fill=gray!10, calign=center
+		[dt]
+		[N\_traj]
+		[times]
+		[steps]
+		[c\_CM]
+		]
+		[pops\_trace, fill=purple!10]
+		[pop\_trajectory\_isolated, fill=green!10]
+		[pop\_lindblad, fill=cyan!10]
+		[N\_traj\_list, fill=orange!10, calign=center
+		[trajectory\_wf, fill=red!10, calign=center
+		[pop\_traj\_samples]
+		[average\_pop]
+		[count]
+		[avg\_count]
+		[bloch, fill=yellow!10]
+		]
+		]
+		]
+		]
+	\end{forest}
+	\label{fig:results_structure}
+\end{figure}
 	
 	
 	

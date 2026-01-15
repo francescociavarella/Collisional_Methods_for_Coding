@@ -475,48 +475,48 @@
 	\end{enumerate}
 	
 	\subsection{Simulation Execution and Data Storage}
-	Once all physical parameters, initial states, and dynamics functions have been defined, the simulations could be run for different $ \Delta t $ and $ N_{Traj} $ values, in order to test \textit{Convergence Properties}. This is achieved through nested loops iterating over the defined parameter lists.	All resulting data are stored and organized in the \textit{Dictionary} \texttt{results}, which has the following structure:
+	The simulation iterates over $\Delta t$ and $N_{Traj}$ values, with nested loops, in order to analyze \textit{Convergence Properties}. To optimize storage, full trajectory histories are retained for only three random samples per configuration. All outcomes are organized in the \texttt{results} dictionary, structured as follows:
 	
-\begin{figure}[htbp]
-	\centering
-	\begin{forest}
-		for tree={
-			grow=0,
-			folder style,
-			edge={draw=black!70, -Latex},
-			s sep=1mm,
-			l sep=10mm,
-			anchor=west, child anchor=west, parent anchor=east,
-			calign=child, calign primary child=1,
-			font=\scriptsize,
-			inner sep=2pt
-		}
-		[results, fill=blue!20, calign=center
-		[dt\_list, fill=blue!10, calign=center
-		[parameters, fill=gray!10, calign=center
-		[dt]
-		[N\_traj]
-		[times]
-		[steps]
-		[c\_CM]
-		]
-		[pops\_trace, fill=purple!10]
-		[pop\_trajectory\_isolated, fill=green!10]
-		[pop\_lindblad, fill=cyan!10]
-		[N\_traj\_list, fill=orange!10, calign=center
-		[trajectory\_wf, fill=red!10, calign=center
-		[pop\_traj\_samples]
-		[average\_pop]
-		[count]
-		[avg\_count]
-		[bloch, fill=yellow!10]
-		]
-		]
-		]
-		]
-	\end{forest}
-	\label{fig:results_structure}
-\end{figure}
+	\begin{figure}[htbp]
+		\centering
+		\begin{forest}
+			for tree={
+				grow=0,
+				folder style,
+				edge={draw=black!70, -Latex},
+				s sep=1.5mm,
+				l sep=10mm,
+				anchor=west, child anchor=west, parent anchor=east,
+				calign=child, calign primary child=1,
+				font=\scriptsize,
+				inner sep=2pt
+			}
+			[results, fill=blue!20, calign=center
+			[dt\_list, fill=blue!10, calign=center
+			[parameters, fill=gray!10, calign=center
+			[dt]
+			[N\_traj]
+			[times]
+			[steps]
+			[c\_CM]
+			]
+			[pops\_trace, fill=purple!10]
+			[pop\_trajectory\_isolated, fill=green!10]
+			[pop\_lindblad, fill=cyan!10]
+			[N\_traj\_list, fill=orange!10, calign=center
+			[trajectory\_wf, fill=red!10, calign=center
+			[pop\_traj\_samples]
+			[average\_pop]
+			[count]
+			[avg\_count]
+			[bloch, fill=yellow!10]
+			]
+			]
+			]
+			]
+		\end{forest}
+		\label{fig:results_structure}
+	\end{figure}
 	
 	
 	

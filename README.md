@@ -8,9 +8,9 @@ Author : Francesco Ciavarella - francesco.ciavarella@studenti.unipd.it
 
 ## Contents : 
 
-1. [Initial Configuration](#1-initial-configuration)
-2. [Repository Organization](#2-repository-organization)
-3. [Future Goals](#3-future-goals)
+1. [Initial Configuration](#initial-configuration)
+2. [Repository Organization](#repository-organization)
+3. [Future Goals](#future-goals)
 
 ---
 
@@ -24,11 +24,11 @@ To replicate the results clone the repository and recreate the Conda enviroment,
     ```
 2. **Create the Enviroment wit Conda**
     ```
-    conda env create -f enviroment.yml
+    conda env create -f environment.yml
     ```
 3. **Activate Enviroment**
     ```
-    conda avtivate mc
+    conda acvtivate mc
     ```
 Now you are ready to navigate the repository and run the notebooks.
 

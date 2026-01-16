@@ -8,11 +8,15 @@ from qutip import *
 import pickle
 import os
 
-# ===========================================================================================
+# ====================================================================================================================================
+
+# ==============
+# Pauli Matrices
+# ==============
 
 sz = np.array([[1,0], [0,-1]]); sx = np.array([[0,1],[1,0]]); sy = np.array([[0,-1j],[1j,0]]) 
 
-# ===========================================================================================
+# ====================================================================================================================================
 
 # ============
 # Hamiltonians
@@ -55,7 +59,7 @@ def system_Hamiltonian(N_site, E, V_array):
 
     return H_sys
 
-# ===============================================================================================================================================
+# ====================================================================================================================================
 
 def interaction_Hamiltonian_N_ancillas(N_site, c_CM, method=None):  
     """
@@ -97,7 +101,7 @@ def interaction_Hamiltonian_N_ancillas(N_site, c_CM, method=None):
 
     return H_int
 
-# ================================================================================================================================================================================
+# ====================================================================================================================================
 
 def hamiltonian_N_ancillas(N_site, E, V_array, c_CM):
     """
@@ -110,9 +114,6 @@ def hamiltonian_N_ancillas(N_site, E, V_array, c_CM):
                 - V_array: Float, Hopping Potential
                 - N_site : int, Number of Sites
                 - c_CM : list, Interaction Forces for the System - Ancilla intercation/collsion
-
-    Interaction_type : - QJ : Quantum Jump Limit
-                       - Diff : Diffusive Limit
 
     Returns : H_system, H_collision, H_tot 
     """
@@ -129,8 +130,7 @@ def hamiltonian_N_ancillas(N_site, E, V_array, c_CM):
 
     return H_system, H_collision, H_tot
 
-#=========================================================================================================
-
+# ====================================================================================================================================
 def evolution_operator(H, dt, method='expm'):
     """
     Build up of the evolution operator U = exp(-i H dt) using Expm or analytic diagonalization.
@@ -168,7 +168,7 @@ def evolution_operator(H, dt, method='expm'):
     else:
         raise ValueError("method : 'expm' or 'diagonalization'")
 
-# ============================================================================================================================
+# ====================================================================================================================================
 
 # ===================
 #  Lindblad Evolution
@@ -188,12 +188,11 @@ def Liouvillian(H, gamma_j, L_j):
     super_L = -1.j * (np.kron(I, H) - np.kron(H.T, I))
 
     for k in range(len(gamma_j)):
-        super_L += gamma_j[k] * (np.kron(np.conj(L_j[k]), L_j[j]) - 0.5 * np.kron(I, np.conj(L_j[k]).T @ L_j[k]) - 0.5 * np.kron((np.conj(L_j[k]).T @ L_j[k]).T, I))
+        super_L += gamma_j[k] * (np.kron(np.conj(L_j[k]), L_j[k]) - 0.5 * np.kron(I, np.conj(L_j[k]).T @ L_j[k]) - 0.5 * np.kron((np.conj(L_j[k]).T @ L_j[k]).T, I))
 
     return super_L
 
-# ====================================================================================
-
+# ====================================================================================================================================
 def Lindblad_evo(rho, H, gamma_j, L_j, times, method="expm", vectorized=True):
     """
     Evolution of the density matrix with the Linblad Eq.
@@ -282,7 +281,7 @@ def Lindblad_evo(rho, H, gamma_j, L_j, times, method="expm", vectorized=True):
     else:
         raise ValueError("Set 'expm', 'diagonal'.")
 
-# =================================================================================================================
+# ====================================================================================================================================
 
 # =========================
 # Isolated System Evolution 
@@ -326,7 +325,7 @@ def compute_trajectory_wf_isolated(N_site, times, projectors, psi_sys_initial, U
 
     return pop_traj_isolated
 
-# ===================================================================================================================================================
+# ====================================================================================================================================
 
 # =============================
 #  Collisional Method functions
@@ -400,7 +399,9 @@ def compute_trace_ancilla(rho_sys_initial, U_diag, V, times, projectors, N_site,
     # Array to store the results of the evolution for only the excited site
     pops_complete = np.zeros((N_site, len(times)), dtype=float) 
 
-    #initial state
+    # -------------
+    # initial state
+    # -------------
     for site in range(N_site):
         pops_complete[site, 0] = np.real(np.trace(projectors[site] @ rho_sys))
 
@@ -425,7 +426,7 @@ def compute_trace_ancilla(rho_sys_initial, U_diag, V, times, projectors, N_site,
 
     return pops_complete
 
-#================================================================================================================
+# ====================================================================================================================================
 
 # =============
 # Bloch Sphere
@@ -459,7 +460,7 @@ def compute_Bloch_Sphere(psi):
 
     return r_x_step, r_y_step, r_z_step
 
-# ===========================================================================================================================================================================
+# =====================================================================================================================================
 
 # =====================
 # Stochastic trajectory 
@@ -605,14 +606,11 @@ def compute_trajectory_wf(dt, c_CM, N_traj, N_site, times, projectors, psi_sys_i
     avg_r_y = np.mean(r_y, axis=1)
     avg_r_z = np.mean(r_z, axis=1)
 
-    trajectories of the \textit{Bloch State Vector} components.
-		\item \texttt{count} : 1D array with dimension $ [N_{Trajectories}] $; stores the cumulative number of measurement of $ \ket{1_a} $ that occurred during the entire trajectory, for each trajectory.
-		\item \texttt{avg\_count} : int number, represents the average value of count over the Number of Sample Trajectories
-
+    avg_count = np.mean(count)
 
     return pop_traj, average_pop_traj, count, avg_count, r_x, r_y, r_z, avg_r_x, avg_r_y, avg_r_z
 
-# =================================================================================================================
+# ====================================================================================================================================
 
 # ==========
 # Parameters
@@ -628,10 +626,10 @@ E = 1.5 + np.random.randn(N_site)*0.1     #random inizialization of the system e
 # -------------------------
 # Time Evolution Parameters
 # -------------------------
-dt_list = [0.01, 0.02, 0.05, 0.1 ]   # Time step
+dt_list = [0.1, 0.01, 0.001 ]   # Time step
 tf = 50.0    # Final Time
 steps_list = [ int(tf / dt_list[i]) for i in range (len(dt_list)) ]
-times _list = [ np.linspace(0, tf, int(steps_list[i])) for i in range(len(dt_list))]
+times_list = [ np.linspace(0, tf, int(steps_list[i])) for i in range(len(dt_list))]
 
 N_traj_list = [100, 1000, 10000]
 
@@ -644,13 +642,6 @@ g_deph = 0.1  # Gamma rate
 #Lindblad Rates
 # -------------
 gamma_j = [g_deph, g_deph]
-
-# ----------------------
-# Lindblad Jump Operator
-# ----------------------
-L_1 = P_10  # projector on |10><10|
-L_2 = P_01  # projector on |01><01|
-L_j = [L_1, L_2]
 
 # ----------------------------------------------------------
 # Scaling for the collsional algorithm c = sqrt(gamma / 4dt)
@@ -667,21 +658,6 @@ c_CM_list = np.array([[np.sqrt(g_deph / (4 * dt_list[j])) for j in range(len(dt_
 psi_sys_initial = tensor(basis(2, 0), basis(2, 1)) # I set the population only in site 2
 rho_sys_initial = (ket2dm(psi_sys_initial)).full()
 
-# ----------
-# Ancilla QJ
-# ----------
-psi_anc_single_QJ = basis(2, 0)
-rho_anc_single_QJ = ket2dm(psi_anc_single_QJ ) # Pure state |0><0| for a singe ancilla 
-rho_anc_all_QJ = (tensor([rho_anc_single_QJ for _ in range(N_site)])).full() #for N ancilla
-
-# ------------
-# Ancilla Diff
-# ------------
-psi_anc_single_Diff_0 = (basis(2, 0)).full() # Pure state |0><0| for a singe ancilla
-psi_anc_single_Diff_1 = (basis(2, 1)).full() # Pure state |1><1| for a singe ancilla
-rho_anc_single_Diff = qeye(2) / 2 # Completely Mixed  1/2 (Identity) 
-rho_anc_all_Diff = (tensor([rho_anc_single_Diff for _ in range(N_site)])).full() #for N ancilla
-
 # ----------------------------
 # Projectors on System's sites
 # ----------------------------
@@ -695,12 +671,19 @@ P_11 = np.kron(P1, P1) # |11><11|
 
 projectors = np.array([P_10, P_01], dtype=complex) # for only excited states
 
+# ----------------------
+# Lindblad Jump Operator
+# ----------------------
+L_1 = P_10  # projector on |10><10|
+L_2 = P_01  # projector on |01><01|
+L_j = [L_1, L_2]
+
 # ==========================
 # QJ or Diff Limit Selection
 # ==========================
-                                            # +++++++++++++++++++++ 
-INTERACTION_LIMIT = 'QJ'  # or 'Diff'       # + Change limit here + 
-                                            # +++++++++++++++++++++ 
+                                                 # +++++++++++++++++++++ 
+INTERACTION_LIMIT = 'QJ'  # 'QJ' or 'Diff'       # + Change limit here + 
+                                                 # +++++++++++++++++++++ 
 # ===========
 # Calculation
 # ===========
@@ -740,7 +723,7 @@ for dt_idx, dt in enumerate(dt_list):
     # -----------------------------------------------
     H_system = system_Hamiltonian(N_site, E, V_array)
 
-    U_site, U_diag_site, w_site, V_site = evolution_operator(H_system, dt, method='diagonalization', hermitian=True)
+    U_site, U_diag_site, w_site, V_site = evolution_operator(H_system, dt, method='diagonalization')
 
     # =========
     # Lindblad
@@ -777,7 +760,9 @@ for dt_idx, dt in enumerate(dt_list):
 
         n_samples_to_save = 3 # number of single exemplary trajectories to store
         indices = np.random.choice(N_traj, n_samples_to_save, replace=False) # random extraction of indices
+
         pop_traj_samples = pop_traj[:, :, indices]
+
         rx_samples = r_x[:, indices]
         ry_samples = r_y[:, indices]
         rz_samples = r_z[:, indices] 
@@ -792,7 +777,7 @@ for dt_idx, dt in enumerate(dt_list):
             },
 
             # Trace Ancilla 
-            'pops_trace': pops_trace,
+            'anc_trace': pops_trace,
 
              # Trajectory Isolated
             'trajectory_isolated': {
@@ -822,7 +807,8 @@ for dt_idx, dt in enumerate(dt_list):
                 }
             }        
         }
-# ======================================================================================================================
+		
+# ====================================================================================================================================
 
 # ==============
 # Saving Results

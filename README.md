@@ -7,9 +7,9 @@ Author : Francesco Ciavarella - francesco.ciavarella@studenti.unipd.it
 ---
 ## Contents : 
 
-1. [Initial Configuration](#1-Initial-Configuration)
-2. [Repository Organization](#2-Repository-Organization)
-3. [Future Goals](#3-Future-Goals)
+1. [Initial Configuration](#1-initial-configuration)
+2. [Repository Organization](#2-repository-organization)
+3. [Future Goals](#3-future-goals)
 
 ---
 
@@ -38,7 +38,7 @@ Now you are ready to navigate the repository and run the notebooks.
 This repository is organized in three main sections:
 
 * **Codes** : contains the source code for the project.
-  * `Main_Dynamics`: implements the core system evolution
+  * `Main_Dynamics.py`: implements the core system evolution
   * `Plot.ipynb`: for visualizing results via standard 2D plotting
   * `Bloch_Sphere.ipynb`: for 3D visualizations of the state's dynamics on the Bloch's Sphere.
 

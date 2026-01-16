@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 # +++++++++++++++++++++++++++
 #  Studing Collisonal Methods
 # +++++++++++++++++++++++++++
@@ -868,10 +862,4 @@ filename = os.path.join(results_dir, f"results_{INTERACTION_LIMIT}.pkl")
 
 with open(filename, 'wb') as f:
     pickle.dump(results, f)
-
-
-# In[ ]:
-
-
-
 

@@ -5,6 +5,7 @@ The results are validated through a comparison with the dynamics derived from th
 Author : Francesco Ciavarella - francesco.ciavarella@studenti.unipd.it
 
 ---
+
 ## Contents : 
 
 1. [Initial Configuration](#1-initial-configuration)

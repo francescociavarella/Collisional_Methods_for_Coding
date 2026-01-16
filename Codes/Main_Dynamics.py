@@ -148,7 +148,7 @@ def evolution_operator(H, dt, method='expm'):
     Method : - "expm"-> build up of the Matrix Exponential with expm
              - "diagonalization"->  build up of the propagater U as V @(exp(-i W dt))@ V_dag with W eigenvalues and V eigenvector of the Hamiltonian 
 
-    Returns : Evolution Operator U, 
+    Returns : Evolution Operator U, eigenvalues w and eigenvectors V
     """
     H = H.full() if hasattr(H, "full") else np.array(H)
 
@@ -189,7 +189,7 @@ def Liouvillian(H, gamma_j, L_j):
                 - gamma_j : list, Decay rates
                 - L_j : list, Jump Operators
 
-    Returns: - super_L : np array, Liouvillian superoperator
+    Returns: super_L  Liouvillian superoperator
     """    
     I = np.eye(H.shape[0])
     super_L = -1.j * (np.kron(I, H) - np.kron(H.T, I))
@@ -218,6 +218,7 @@ def Lindblad_evo(rho, H, gamma_j, L_j, times, method="expm", vectorized=True):
 
     Returns : - if vectorized=True → array (N^2, Nt)
               - if vectorized=False → array (Nt, N_site, N_site)
+              - eigenvectors w and eigenvalues V
     """
     # Convert to NumPy
     L_j = [L.full() if hasattr(L, "full") else np.array(L, dtype=complex) for L in L_j]
@@ -297,7 +298,7 @@ def Lindblad_evo(rho, H, gamma_j, L_j, times, method="expm", vectorized=True):
 
 def compute_trajectory_wf_isolated(N_site, times, projectors, psi_sys_initial, U_site):
     """
-    Compute quantum trajectory evolution of the wave function with only H_system = Energy of the Site and Hopping Potential V.
+    Compute quantum trajectory evolution of the wave function with only H_Exc = Energy of the Site and Hopping Potential V.
     Calculated for only 1 trajecotry (always the same evolution)
 
     Parameters: - N_site : int, Number of Sites
